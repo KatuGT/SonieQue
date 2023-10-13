@@ -29,8 +29,8 @@ const CardSuenio = ({ suenio }: { suenio: string }) => {
   }, []);
 
   return (
-    <div className="bg-gray-800 rounded-lg overflow-hidden">
-      <header className="flex justify-between items-center bg-gray-700 px-4 py-2">
+    <div className="rounded-lg overflow-hidden">
+      <header className="flex justify-between items-center backdrop-blur-sm bg-white/30 px-4 py-2">
         <span>#4</span>
         <div className="flex gap-2">
           <div className="flex gap-1 flex-col justify-center items-center">
@@ -55,10 +55,10 @@ const CardSuenio = ({ suenio }: { suenio: string }) => {
           </Button>
         </div>
       </header>
-      <main className="p-4">
+      <main className="p-4 bg-gray-800 ">
         <User
           name="Jane Doe"
-          description="Product Designer"
+          description="hace 6 horas"
           avatarProps={{
             src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
           }}
@@ -85,7 +85,7 @@ const CardSuenio = ({ suenio }: { suenio: string }) => {
           )}
         </div>
       </main>
-      <footer className="px-4 py-2 bg-gray-700 flex gap-2 flex-wrap">
+      <footer className="px-4 py-2 backdrop-blur-sm bg-white/30  bg-gray-700 flex gap-2 flex-wrap">
         <Chip color="default">Caía</Chip>
         <Chip color="primary">volaba</Chip>
         <Chip color="secondary">alguien me perseguía</Chip>
