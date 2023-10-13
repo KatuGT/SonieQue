@@ -43,33 +43,35 @@ const Filters = () => {
       </div>
 
       <div className="md:hidden">
-        <Button onPress={onOpen} variant="shadow" color="primary">Filtros</Button>
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <Button onPress={onOpen} variant="shadow" color="primary">
+          Filtros
+        </Button>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className="top-[-40%]">
           <ModalContent>
             {(onClose) => (
-                <ModalBody>
-                  <CheckboxGroup
-                    label="Soñé que..."
-                    color="warning"
-                    value={selected}
-                    onValueChange={setSelected}
-                  >
-                    {filtros.map((filter) => (
-                      <Checkbox key={filter.value} value={filter.value}>
-                        {filter.key}
-                      </Checkbox>
-                    ))}
-                  </CheckboxGroup>
-                  <Button
-                    className="mt-3"
-                    color="primary"
-                    variant="bordered"
-                    onClick={() => setSelected([""])}
-                    isDisabled={selected.length < 2}
-                  >
-                    Resetear
-                  </Button>
-                </ModalBody>
+              <ModalBody className="py-5">
+                <CheckboxGroup
+                  label="Soñé que..."
+                  color="warning"
+                  value={selected}
+                  onValueChange={setSelected}
+                >
+                  {filtros.map((filter) => (
+                    <Checkbox key={filter.value} value={filter.value}>
+                      {filter.key}
+                    </Checkbox>
+                  ))}
+                </CheckboxGroup>
+                <Button
+                  className="mt-3"
+                  color="primary"
+                  variant="bordered"
+                  onClick={() => setSelected([""])}
+                  isDisabled={selected.length < 2}
+                >
+                  Resetear
+                </Button>
+              </ModalBody>
             )}
           </ModalContent>
         </Modal>
