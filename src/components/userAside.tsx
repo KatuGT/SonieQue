@@ -1,9 +1,7 @@
 import {
   Listbox,
-  ListboxSection,
   ListboxItem,
   Avatar,
-  Chip,
   Divider,
   Link,
   Button,
@@ -17,18 +15,22 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import LoyaltyIcon from "@mui/icons-material/Loyalty";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import nextLink from "next/link";
+import Person3Icon from '@mui/icons-material/Person3';
 
 const UserAside = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <div>
-       {/* Versión mobile */}
+      {/* Versión mobile */}
       <div className="hidden md:block">
         <div className="flex items-center gap-4">
           <Avatar
             src="https://i.pravatar.cc/150?u=a04258114e29026708c"
-            className="w-20 h-20 text-large mb-2 shrink-0"
+            isBordered
+            color="secondary"
+            className="w-12 h-15 text-large"
+            radius="sm"
           />
           <span className="break-all">katu93dev</span>
         </div>
@@ -36,17 +38,21 @@ const UserAside = () => {
         <Listbox variant="shadow" color="secondary" aria-label="Actions">
           <ListboxItem
             key="editarPerfil"
-            startContent={<EditIcon className="text-md" />}
+            startContent={<Person3Icon className="text-md" />}
           >
-            <Link href="/" color="foreground" as={nextLink}>
-              Editar perfil
+            <Link href="/perfilConf/editar" color="foreground" as={nextLink}>
+              Mi perfil
             </Link>
           </ListboxItem>
           <ListboxItem
             key="misSuenios"
             startContent={<AutoAwesomeIcon className="text-md" />}
           >
-            <Link href="/" color="foreground" as={nextLink}>
+            <Link
+              href="/perfilConf/misSuenios"
+              color="foreground"
+              as={nextLink}
+            >
               Mis sueños
             </Link>
           </ListboxItem>
@@ -54,7 +60,11 @@ const UserAside = () => {
             key="misFavoritos"
             startContent={<LoyaltyIcon className="text-md" />}
           >
-            <Link href="/" color="foreground" as={nextLink}>
+            <Link
+              href="/perfilConf/misFavoritos"
+              color="foreground"
+              as={nextLink}
+            >
               Mis favoritos
             </Link>
           </ListboxItem>
@@ -82,6 +92,7 @@ const UserAside = () => {
           </ListboxItem>
         </Listbox>
       </div>
+
       {/* Versión desktop */}
       <div className="md:hidden flex justify-end">
         <Button onPress={onOpen} variant="shadow" color="secondary">
@@ -112,7 +123,11 @@ const UserAside = () => {
                     key="editarPerfil"
                     startContent={<EditIcon className="text-md" />}
                   >
-                    <Link href="/" color="foreground" as={nextLink}>
+                    <Link
+                      href="/perfilConf/editar"
+                      color="foreground"
+                      as={nextLink}
+                    >
                       Editar perfil
                     </Link>
                   </ListboxItem>
@@ -120,7 +135,11 @@ const UserAside = () => {
                     key="misSuenios"
                     startContent={<AutoAwesomeIcon className="text-md" />}
                   >
-                    <Link href="/" color="foreground" as={nextLink}>
+                    <Link
+                      href="/perfilConf/misSuenios"
+                      color="foreground"
+                      as={nextLink}
+                    >
                       Mis sueños
                     </Link>
                   </ListboxItem>
@@ -128,7 +147,11 @@ const UserAside = () => {
                     key="misFavoritos"
                     startContent={<LoyaltyIcon className="text-md" />}
                   >
-                    <Link href="/" color="foreground" as={nextLink}>
+                    <Link
+                      href="/perfilConf/misFavoritos"
+                      color="foreground"
+                      as={nextLink}
+                    >
                       Mis favoritos
                     </Link>
                   </ListboxItem>

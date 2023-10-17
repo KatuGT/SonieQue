@@ -7,6 +7,7 @@ import Nube3 from "../assets/imagenes/nube3.svg";
 import Nube4 from "../assets/imagenes/nube4.svg";
 import Nubecita1 from "../assets/imagenes/nubecita1.svg";
 import Nubecita2 from "../assets/imagenes/nubecita2.svg";
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -17,6 +18,7 @@ const Header = () => {
         height={300}
         className="absolute translate-x-[-100%]  md:translate-x-[-100%] xl:translate-x-[-120%] translate-y-[20%] transition "
       />
+
       <Image
         alt="Nube2"
         src={Nube2}
@@ -49,8 +51,9 @@ const Header = () => {
         height={50}
         className="absolute translate-x-[400%]  md:translate-x-[500%] xl:translate-x-[850%] translate-y-[700%] transition"
       />
-
-      <Image alt="logo" src={Logo} height={600} />
+      <Link href="/">
+        <Image alt="logo" src={Logo} height={600} />
+      </Link>
     </header>
   );
 };
