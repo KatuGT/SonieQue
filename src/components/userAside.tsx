@@ -38,7 +38,7 @@ const UserAside = () => {
             key="editarPerfil"
             startContent={<EditIcon className="text-md" />}
           >
-            <Link href="/" color="foreground" as={nextLink}>
+            <Link href="/perfilConf/editar" color="foreground" as={nextLink}>
               Editar perfil
             </Link>
           </ListboxItem>
@@ -46,7 +46,7 @@ const UserAside = () => {
             key="misSuenios"
             startContent={<AutoAwesomeIcon className="text-md" />}
           >
-            <Link href="/" color="foreground" as={nextLink}>
+            <Link href="/perfilConf/misSuenios" color="foreground" as={nextLink}>
               Mis sueños
             </Link>
           </ListboxItem>
@@ -54,7 +54,7 @@ const UserAside = () => {
             key="misFavoritos"
             startContent={<LoyaltyIcon className="text-md" />}
           >
-            <Link href="/" color="foreground" as={nextLink}>
+            <Link href="/perfilConf/misFavoritos" color="foreground" as={nextLink}>
               Mis favoritos
             </Link>
           </ListboxItem>
@@ -82,6 +82,7 @@ const UserAside = () => {
           </ListboxItem>
         </Listbox>
       </div>
+
       {/* Versión desktop */}
       <div className="md:hidden flex justify-end">
         <Button onPress={onOpen} variant="shadow" color="secondary">
@@ -112,7 +113,7 @@ const UserAside = () => {
                     key="editarPerfil"
                     startContent={<EditIcon className="text-md" />}
                   >
-                    <Link href="/" color="foreground" as={nextLink}>
+                    <Link href="/perfilConf/editar" color="foreground" as={nextLink}>
                       Editar perfil
                     </Link>
                   </ListboxItem>
@@ -120,7 +121,7 @@ const UserAside = () => {
                     key="misSuenios"
                     startContent={<AutoAwesomeIcon className="text-md" />}
                   >
-                    <Link href="/" color="foreground" as={nextLink}>
+                    <Link href="/perfilConf/misSuenios" color="foreground" as={nextLink}>
                       Mis sueños
                     </Link>
                   </ListboxItem>
@@ -128,7 +129,7 @@ const UserAside = () => {
                     key="misFavoritos"
                     startContent={<LoyaltyIcon className="text-md" />}
                   >
-                    <Link href="/" color="foreground" as={nextLink}>
+                    <Link href="/perfilConf/misFavoritos" color="foreground" as={nextLink}>
                       Mis favoritos
                     </Link>
                   </ListboxItem>
