@@ -1,7 +1,6 @@
 "use client";
 import CardSuenio from "@/components/cardSueño";
 import {
-  Avatar,
   Button,
   Checkbox,
   CheckboxGroup,
