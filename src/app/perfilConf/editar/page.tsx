@@ -21,9 +21,9 @@ import nextLink from "next/link";
 import MoodBadIcon from "@mui/icons-material/MoodBad";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import EditIcon from "@mui/icons-material/Edit";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const EditarPerfil = () => {
+  
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
