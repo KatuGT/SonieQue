@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import { Button, Chip, User } from "@nextui-org/react";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { Button, Chip, Link, User } from "@nextui-org/react";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { PiArrowFatUpFill, PiArrowFatDownFill } from "react-icons/pi";
+import NextLink from "next/link";
+import LoyaltyIcon from "@mui/icons-material/Loyalty";
 
 const CardSuenio = ({ suenio }: { suenio: string }) => {
   const [verMas, setVerMas] = useState(false);
@@ -28,20 +30,54 @@ const CardSuenio = ({ suenio }: { suenio: string }) => {
     }
   }, []);
 
+  const [like, setLike] = useState("none");
+  const [favorito, setFavorito] = useState(false);
+
   return (
     <div className="rounded-lg overflow-hidden">
       <header className="flex justify-between items-center backdrop-blur-sm bg-white/30 px-4 py-2">
-        <span>#4</span>
+        <Link
+          as={NextLink}
+          href="/"
+          showAnchorIcon
+          anchorIcon={<OpenInNewIcon />}
+          color="foreground"
+        >
+          #4560565
+        </Link>
         <div className="flex gap-2">
+          <Button
+            isIconOnly
+            color="secondary"
+            variant={favorito ? "shadow" : "bordered"}
+            aria-label="Añadir a favoritos este sueño"
+            onClick={() => setFavorito(!favorito)}
+          >
+            <LoyaltyIcon />
+          </Button>
           <div className="flex gap-1 flex-col justify-center items-center">
-            <Button isIconOnly color="warning" aria-label="Take a photo">
-              <ThumbDownIcon />
+            <Button
+              isIconOnly
+              color="success"
+              variant={like === "like" ? "shadow" : "bordered"}
+              className="text-xl"
+              aria-label="Me gusta este sueño"
+              onClick={() => setLike("like")}
+            >
+              <PiArrowFatUpFill />
             </Button>
           </div>
 
           <div className="flex gap-1 flex-col justify-center items-center">
-            <Button isIconOnly color="warning" aria-label="Take a photo">
-              <ThumbUpIcon />
+            <Button
+              isIconOnly
+              color="warning"
+              variant={like === "dislike" ? "shadow" : "bordered"}
+              className="text-xl"
+              aria-label="No me gusta este sueño"
+              onClick={() => setLike("dislike")}
+            >
+              <PiArrowFatDownFill />
             </Button>
           </div>
 
@@ -49,7 +85,7 @@ const CardSuenio = ({ suenio }: { suenio: string }) => {
             isIconOnly
             color="danger"
             variant="bordered"
-            aria-label="Take a photo"
+            aria-label="Denuncia este sueño"
           >
             <PriorityHighIcon />
           </Button>
