@@ -8,7 +8,7 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import LoyaltyIcon from "@mui/icons-material/Loyalty";
 import Person3Icon from '@mui/icons-material/Person3';
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const LayoutPerfilConf = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
 
   return (
@@ -74,4 +74,4 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default Layout;
+export default LayoutPerfilConf;
