@@ -38,7 +38,7 @@ const CardSuenio = ({ suenio }: { suenio: string }) => {
       <header className="flex justify-between items-center backdrop-blur-sm bg-white/30 px-4 py-2">
         <Link
           as={NextLink}
-          href="/"
+          href="/suenioDetalle"
           showAnchorIcon
           anchorIcon={<OpenInNewIcon />}
           color="foreground"
