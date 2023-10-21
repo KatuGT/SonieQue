@@ -15,7 +15,7 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import LoyaltyIcon from "@mui/icons-material/Loyalty";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import nextLink from "next/link";
-import Person3Icon from '@mui/icons-material/Person3';
+import Person3Icon from "@mui/icons-material/Person3";
 
 const UserAside = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -101,7 +101,7 @@ const UserAside = () => {
         <Modal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          className="top-[-40%]"
+          placement="top-center"
         >
           <ModalContent>
             {(onClose) => (
