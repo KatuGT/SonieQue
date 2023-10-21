@@ -72,7 +72,7 @@ const UserAside = () => {
             key="cerrarSesion"
             startContent={<MeetingRoomIcon className="text-md" />}
           >
-            <Link href="auth/login" color="foreground" as={nextLink}>
+            <Link href="auth" color="foreground" as={nextLink}>
               Cerrar sesión
             </Link>
           </ListboxItem>
@@ -159,7 +159,7 @@ const UserAside = () => {
                     key="cerrarSesion"
                     startContent={<MeetingRoomIcon className="text-md" />}
                   >
-                    <Link href="/" color="foreground" as={nextLink}>
+                    <Link href="auth" color="foreground" as={nextLink}>
                       Cerrar sesión
                     </Link>
                   </ListboxItem>
