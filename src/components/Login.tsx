@@ -35,7 +35,7 @@ const Login = () => {
 
   const router = useRouter();
 
-  const onSubmit = (data: LoginProps) => {
+  const onSubmitLogin = (data: LoginProps) => {
     console.log(data);
     router.push("/");
   };
@@ -52,7 +52,7 @@ const Login = () => {
       <span className="text-center z-10">O con tu Email y contraseña</span>
 
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmitLogin)}
         className="flex flex-col gap-2 text-center  w-full justify-center items-center md:w-1/2"
       >
         <Input
