@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.className} bg-gradient-to-b from-superDarkBlue to-darkBlue min-h-screen`}
+        className={`${inter.className} bg-gradient-to-b from-superDarkBlue to-darkBlue min-h-screen pb-40`}
       >
         <div className="bg-repeat bg-[url('./../assets/imagenes/patronEstrellas.png')]">
           <Header />

@@ -26,4 +26,36 @@ body {
     rgb(var(--background-start-rgb));
 }
 
- 
+.bg-google {
+  background: rgb(69, 133, 244);
+  background: linear-gradient(
+    133deg,
+    rgba(69, 133, 244, 1) 0%,
+    rgba(232, 67, 58, 1) 30%,
+    rgba(253, 189, 8, 1) 62%,
+    rgba(52, 168, 83, 1) 100%
+  );
+}
+
+.bg-facebook{
+  background-color: #0865fe;
+}
+
+.bg-instagram{
+  background: rgb(69, 133, 244);
+  background: linear-gradient(
+    133deg,
+    rgb(64, 105, 200) 0%,
+    rgb(200, 55, 172) 30%,
+    rgb(253, 82, 67) 62%,
+    rgb(255, 213, 84) 100%
+  );
+}
+
+.bg-twitter{
+  background-color: rgb(4, 175, 245);
+}
+
+.registro:focus-within + .bg-movedizo {
+  transform: translateX(100%);
+}
