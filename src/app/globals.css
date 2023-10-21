@@ -55,3 +55,7 @@ body {
 .bg-twitter{
   background-color: rgb(4, 175, 245);
 }
+
+.registro:focus-within + .bg-movedizo {
+  transform: translateX(100%);
+}

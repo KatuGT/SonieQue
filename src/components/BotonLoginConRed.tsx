@@ -52,7 +52,7 @@ const BotonLoginConRed = ({ red }: RedProps) => {
 
   return (
     <Button
-      className={`${dataBoton.bgBolor} text-darkBlue w-1/2 rounded-lg py-2 font-bold flex items-center justify-center gap-2 cursor-pointer`}
+      className={`${dataBoton.bgBolor} text-darkBlue w-full md:w-1/2 rounded-lg py-2 font-bold flex items-center justify-center gap-2 cursor-pointer`}
     >
       {dataBoton.logo}
       <span>{dataBoton.texto}</span>
