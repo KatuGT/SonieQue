@@ -46,7 +46,7 @@ const Filters = () => {
         <Button onPress={onOpen} variant="shadow" color="primary">
           Filtros
         </Button>
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className="top-[-40%]">
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
           <ModalContent>
             {(onClose) => (
               <ModalBody className="py-5">
