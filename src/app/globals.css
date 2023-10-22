@@ -37,11 +37,11 @@ body {
   );
 }
 
-.bg-facebook{
+.bg-facebook {
   background-color: #0865fe;
 }
 
-.bg-instagram{
+.bg-instagram {
   background: rgb(69, 133, 244);
   background: linear-gradient(
     133deg,
@@ -52,10 +52,15 @@ body {
   );
 }
 
-.bg-twitter{
+.bg-twitter {
   background-color: rgb(4, 175, 245);
 }
 
 .registro:focus-within + .bg-movedizo {
   transform: translateX(100%);
+}
+
+.textAreaPostSuenio .will-change-auto,
+.textAreaPostSuenio .flex {
+  display: none;
 }
