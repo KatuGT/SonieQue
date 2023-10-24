@@ -1,11 +1,30 @@
-import { Button, Image, Input, Textarea } from "@nextui-org/react";
+import {
+  Button,
+  Textarea,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/react";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useRef, useState } from "react";
 import NextImage from "next/image";
 import ClearIcon from "@mui/icons-material/Clear";
-import { json } from "stream/consumers";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { uploadImages } from "@/utils/uploadImages";
+
+interface PostSuenioProps {
+  texto: string;
+  imagenes: FileList;
+}
 
 const PostSuenio = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleButtonClick = () => {
@@ -27,18 +46,15 @@ const PostSuenio = () => {
     if (files && files?.length >= 3) {
       setCantidadImgExcedida(true);
     } else if (files && files?.length < 3) {
-
       setCantidadImgExcedida(false);
 
       const filesArray = Array.from(files);
 
       for (const file of filesArray) {
-
         const img = new (window as any).Image();
         img.src = URL.createObjectURL(file);
 
         img.onload = function () {
-
           const width = img.width;
           const height = img.height;
 
@@ -56,91 +72,149 @@ const PostSuenio = () => {
     }
   };
 
-  return (
-    <form className="flex flex-col  gap-2">
-      <h3>¿Qué soñaste anoche?</h3>
-      <div className="flex gap-2 items-center">
-        <Textarea
-          variant="faded"
-          labelPlacement="outside"
-          label="Suénio"
-          placeholder="Soñé que..."
-          className="col-span-12 md:col-span-6 h-full textAreaPostSuenio"
-          minRows={4}
-          maxRows={8}
-          color="secondary"
-        />
-        <Button color="secondary" type="submit" className="h-full">
-          Enviar
-        </Button>
-      </div>
+  const postSueniosSchema = z
+    .object({
+      texto: z.string(),
+      imagenes: z.instanceof(FileList),
+    })
 
-      <div className="flex gap-2 items-center">
-        <div className="flex flex-col gap-1">
-          <Button
-            startContent={<AddAPhotoIcon />}
-            variant="ghost"
-            onClick={handleButtonClick}
-            className="self-start"
-            color="success"
-            isDisabled={imagePreview.length === 3}
-          >
-            Agregar imagen
-            <input
-              ref={inputRef}
-              id="postImg"
-              type="file"
-              accept="image/*"
-              multiple
-              capture
-              className="appearance-none hidden"
-              onChange={(e) => handleImageChoose(e)}
-            />
-          </Button>
-          <p
-            className={`text-xs text-gray-500 ${
-              cantidadImgExcedida && "text-red-500"
-            }`}
-          >
-            - Máximo 3 imagenes
-          </p>
-          <p
-            className={`text-xs text-gray-500 ${
-              tamanioIncorrecto && "text-red-500"
-            }`}
-          >
-            - 500px mínimo, 1200px máximo
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          {imagePreview &&
-            imagePreview.map((imageUrl, index) => (
-              <figure
-                key={index}
-                className="relative cursor-pointer overflow-hidden h-16  w-16 rounded-lg"
-              >
-                <NextImage
-                  fill={true}
-                  objectFit="cover"
-                  src={imageUrl}
-                  alt="Vista previa de imagenes seleccionadas"
-                  className="cursor-pointer bg-slate-50"
-                />
-                <div
-                  className="absolute h-full w-full bg-gray-600/30 inset-0 z-10 opacity-0 hover:opacity-100 overflow-hidden flex justify-center items-center text-superDarkBlue text-xl"
-                  onClick={() =>
-                    setImagePreview((prev) =>
-                      prev.filter((img) => img !== imageUrl)
-                    )
-                  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<PostSuenioProps>({
+    resolver: zodResolver(postSueniosSchema),
+  });
+
+  console.log(errors);
+  
+
+  const onSubmitLogin = async (data: PostSuenioProps) => {
+    console.log(data);
+    const { imagenes, texto } = data;
+
+    try {
+      const imageURLs = await uploadImages(imagenes);
+      console.log(imageURLs);
+
+      // Haz algo con las URL de las imágenes, por ejemplo, guardarlas en la base de datos.
+    } catch (error) {
+      // Maneja el error aquí
+    }
+  };
+
+  return (
+    <>
+      <Button onPress={onOpen}>Open Modal</Button>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Modal Title
+              </ModalHeader>
+              <ModalBody>
+                <form
+                  onSubmit={handleSubmit(onSubmitLogin)}
+                  className="flex flex-col  gap-2"
                 >
-                  <ClearIcon className="text-4xl" />
-                </div>
-              </figure>
-            ))}
-        </div>
-      </div>
-    </form>
+                  <h3>¿Qué soñaste anoche?</h3>
+                  <Textarea
+                    variant="faded"
+                    labelPlacement="outside"
+                    label="Suénio"
+                    placeholder="Soñé que..."
+                    className="col-span-12 md:col-span-6 h-full textAreaPostSuenio"
+                    minRows={4}
+                    maxRows={8}
+                    color="secondary"
+                    {...register("texto")}
+                  />
+
+                  <div className="flex gap-2 items-center">
+                    <div className="flex flex-col gap-1">
+                      <Button
+                        startContent={<AddAPhotoIcon />}
+                        variant="ghost"
+                        onClick={handleButtonClick}
+                        className="self-start"
+                        color="success"
+                        isDisabled={imagePreview.length === 3}
+                      >
+                        Agregar imagen
+                        <input
+                          // ref={inputRef}
+                          id="postImg"
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          capture
+                          // className="appearance-none hidden"
+                          // onChange={(e) => handleImageChoose(e)}
+                          {...register("imagenes")}
+                        />
+                      </Button>
+                      <p
+                        className={`text-xs text-gray-500 ${
+                          cantidadImgExcedida && "text-red-500"
+                        }`}
+                      >
+                        - Máximo 3 imagenes
+                      </p>
+                      <p
+                        className={`text-xs text-gray-500 ${
+                          tamanioIncorrecto && "text-red-500"
+                        }`}
+                      >
+                        - 500px mínimo, 1200px máximo
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {imagePreview &&
+                        imagePreview.map((imageUrl, index) => (
+                          <figure
+                            key={index}
+                            className="relative cursor-pointer overflow-hidden h-16  w-16 rounded-lg"
+                          >
+                            <NextImage
+                              fill={true}
+                              objectFit="cover"
+                              src={imageUrl}
+                              alt="Vista previa de imagenes seleccionadas"
+                              className="cursor-pointer bg-slate-50"
+                            />
+                            <div
+                              className="absolute h-full w-full bg-gray-600/30 inset-0 z-10 opacity-0 hover:opacity-100 overflow-hidden flex justify-center items-center text-superDarkBlue text-xl"
+                              onClick={() =>
+                                setImagePreview((prev) =>
+                                  prev.filter((img) => img !== imageUrl)
+                                )
+                              }
+                            >
+                              <ClearIcon className="text-4xl" />
+                            </div>
+                          </figure>
+                        ))}
+                    </div>
+                  </div>
+                  <Button color="danger" variant="light" type="submit">
+                    enviar
+                  </Button>
+                </form>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onPress={onClose}>
+                  Action
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 

@@ -39,56 +39,41 @@ const UserAside = () => {
           <ListboxItem
             key="editarPerfil"
             startContent={<Person3Icon className="text-md" />}
+            as={nextLink}
+            href="/perfilConf/editar"
           >
-            <Link href="/perfilConf/editar" color="foreground" as={nextLink}>
-              Mi perfil
-            </Link>
+            Mi perfil
           </ListboxItem>
           <ListboxItem
             key="misSuenios"
             startContent={<AutoAwesomeIcon className="text-md" />}
+            as={nextLink}
+            href="/perfilConf/misSuenios"
           >
-            <Link
-              href="/perfilConf/misSuenios"
-              color="foreground"
-              as={nextLink}
-            >
-              Mis sueños
-            </Link>
+            Mis sueños
           </ListboxItem>
           <ListboxItem
             key="misFavoritos"
             startContent={<LoyaltyIcon className="text-md" />}
+            href="/perfilConf/misFavoritos"
+            as={nextLink}
           >
-            <Link
-              href="/perfilConf/misFavoritos"
-              color="foreground"
-              as={nextLink}
-            >
-              Mis favoritos
-            </Link>
+            Mis favoritos
           </ListboxItem>
           <ListboxItem
             key="cerrarSesion"
             startContent={<MeetingRoomIcon className="text-md" />}
+            as={nextLink}
+            href="auth"
           >
-            <Link href="auth" color="foreground" as={nextLink}>
-              Cerrar sesión
-            </Link>
+            Cerrar sesión
           </ListboxItem>
         </Listbox>
         <Divider className="my-4" />
 
         <Listbox variant="shadow" color="secondary" aria-label="Actions">
-          <ListboxItem key="sobreNosotros">
-            <Link
-              href="/"
-              color="foreground"
-              as={nextLink}
-              className="hover:text-white"
-            >
-              Sobre nosotros
-            </Link>
+          <ListboxItem key="sobreNosotros" href="/" as={nextLink}>
+            Sobre nosotros
           </ListboxItem>
         </Listbox>
       </div>
@@ -122,46 +107,34 @@ const UserAside = () => {
                   <ListboxItem
                     key="editarPerfil"
                     startContent={<EditIcon className="text-md" />}
+                    as={nextLink}
+                    href="/perfilConf/editar"
                   >
-                    <Link
-                      href="/perfilConf/editar"
-                      color="foreground"
-                      as={nextLink}
-                    >
-                      Editar perfil
-                    </Link>
+                    Editar perfil
                   </ListboxItem>
                   <ListboxItem
                     key="misSuenios"
                     startContent={<AutoAwesomeIcon className="text-md" />}
+                    as={nextLink}
+                    href="/perfilConf/misSuenios"
                   >
-                    <Link
-                      href="/perfilConf/misSuenios"
-                      color="foreground"
-                      as={nextLink}
-                    >
-                      Mis sueños
-                    </Link>
+                    Mis sueños
                   </ListboxItem>
                   <ListboxItem
                     key="misFavoritos"
                     startContent={<LoyaltyIcon className="text-md" />}
+                    as={nextLink}
+                    href="/perfilConf/misFavoritos"
                   >
-                    <Link
-                      href="/perfilConf/misFavoritos"
-                      color="foreground"
-                      as={nextLink}
-                    >
-                      Mis favoritos
-                    </Link>
+                    Mis favoritos
                   </ListboxItem>
                   <ListboxItem
                     key="cerrarSesion"
                     startContent={<MeetingRoomIcon className="text-md" />}
+                    as={nextLink}
+                    href="auth"
                   >
-                    <Link href="auth" color="foreground" as={nextLink}>
-                      Cerrar sesión
-                    </Link>
+                    Cerrar sesión
                   </ListboxItem>
                 </Listbox>
                 <Divider className="my-2" />
@@ -171,15 +144,8 @@ const UserAside = () => {
                   color="secondary"
                   aria-label="Actions"
                 >
-                  <ListboxItem key="sobreNosotros">
-                    <Link
-                      href="/"
-                      color="foreground"
-                      as={nextLink}
-                      className="hover:text-white"
-                    >
-                      Sobre nosotros
-                    </Link>
+                  <ListboxItem key="sobreNosotros" as={nextLink} href="/">
+                    Sobre nosotros
                   </ListboxItem>
                 </Listbox>
               </ModalBody>
