@@ -9,17 +9,17 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NextImage from "next/image";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { uploadImages } from "@/utils/uploadImages";
 
 interface PostSuenioProps {
   texto: string;
-  imagenes: FileList;
+  imagenes: any;
 }
 
 const PostSuenio = () => {
@@ -36,6 +36,8 @@ const PostSuenio = () => {
   const [cantidadImgExcedida, setCantidadImgExcedida] = useState(false);
 
   const [tamanioIncorrecto, setTamanioIncorrecto] = useState(false);
+
+  const [archivosParaSubir, setArchivosParaSubir] = useState<any>();
 
   const handleImageChoose = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e?.target?.files;
@@ -64,6 +66,7 @@ const PostSuenio = () => {
           ) {
             setImagePreview((prevImages) => [...prevImages, img.src]);
             setTamanioIncorrecto(false);
+            setArchivosParaSubir(files);
           } else {
             setTamanioIncorrecto(true);
           }
@@ -72,88 +75,124 @@ const PostSuenio = () => {
     }
   };
 
-  const postSueniosSchema = z
-    .object({
-      texto: z.string(),
-      imagenes: z.instanceof(FileList),
-    })
+  const postSueniosSchema = z.object({
+    texto: z
+      .string()
+      .min(20, "Muy corto, contanos algo interesante")
+      .max(1200, "Muy largooo, máximo 1200 caracteres"),
+    imagenes: z.any(),
+  });
 
   const {
-    register,
     handleSubmit,
-    formState: { errors },
+    control,
+    reset,
+    formState: { errors, isSubmitSuccessful },
   } = useForm<PostSuenioProps>({
     resolver: zodResolver(postSueniosSchema),
   });
 
-  console.log(errors);
-  
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset({ texto: "", imagenes: null });
+      setImagePreview([]);
+      setArchivosParaSubir(null);
+    }
+  }, [isSubmitSuccessful, reset]);
 
   const onSubmitLogin = async (data: PostSuenioProps) => {
-    console.log(data);
-    const { imagenes, texto } = data;
+    const { texto } = data;
+    console.log(texto);
 
     try {
-      const imageURLs = await uploadImages(imagenes);
-      console.log(imageURLs);
-
-      // Haz algo con las URL de las imágenes, por ejemplo, guardarlas en la base de datos.
-    } catch (error) {
-      // Maneja el error aquí
-    }
+      if (archivosParaSubir) {
+        const imageURLs = await uploadImages(archivosParaSubir);
+        console.log(imageURLs);
+      }
+    } catch (error) {}
   };
 
+  console.log(archivosParaSubir);
+  
   return (
     <>
-      <Button onPress={onOpen}>Open Modal</Button>
+      <Button onPress={onOpen}>Contanos que soñaste</Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Modal Title
+                ¿Qué soñaste?
               </ModalHeader>
               <ModalBody>
                 <form
                   onSubmit={handleSubmit(onSubmitLogin)}
                   className="flex flex-col  gap-2"
                 >
-                  <h3>¿Qué soñaste anoche?</h3>
-                  <Textarea
-                    variant="faded"
-                    labelPlacement="outside"
-                    label="Suénio"
-                    placeholder="Soñé que..."
-                    className="col-span-12 md:col-span-6 h-full textAreaPostSuenio"
-                    minRows={4}
-                    maxRows={8}
-                    color="secondary"
-                    {...register("texto")}
+                  <Controller
+                    control={control}
+                    name="texto"
+                    render={({ field: { onChange, onBlur, value, ref } }) => (
+                      <Textarea
+                        ref={ref}
+                        variant="faded"
+                        placeholder="Soñé que..."
+                        className="col-span-12 md:col-span-6 h-full textAreaPostSuenio"
+                        minRows={4}
+                        maxRows={8}
+                        color="secondary"
+                        isInvalid={!!errors.texto}
+                        isRequired={true}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                      />
+                    )}
                   />
 
-                  <div className="flex gap-2 items-center">
+                  {errors.texto && (
+                    <p className="text-xs text-danger-300">
+                      {errors.texto.message}
+                    </p>
+                  )}
+                  <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-1">
-                      <Button
-                        startContent={<AddAPhotoIcon />}
-                        variant="ghost"
-                        onClick={handleButtonClick}
-                        className="self-start"
-                        color="success"
-                        isDisabled={imagePreview.length === 3}
-                      >
-                        Agregar imagen
-                        <input
-                          // ref={inputRef}
-                          id="postImg"
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          capture
-                          // className="appearance-none hidden"
-                          // onChange={(e) => handleImageChoose(e)}
-                          {...register("imagenes")}
-                        />
-                      </Button>
+                      <label htmlFor="botonImagen">
+                        <Button
+                          startContent={<AddAPhotoIcon />}
+                          variant="ghost"
+                          className="self-start"
+                          color="success"
+                          style={{ pointerEvents: "none", cursor: "pointer" }}
+                          isDisabled={imagePreview.length === 3}
+                        >
+                          Agregar imagen
+                        </Button>
+                      </label>
+
+                      <Controller
+                        control={control}
+                        name="imagenes"
+                        render={({
+                          field: { onChange, onBlur, value, ref },
+                        }) => (
+                          <input
+                            className="appearance-none hidden"
+                            ref={ref}
+                            id="botonImagen"
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            capture
+                            onChange={(e) => {
+                              onChange(e);
+                              handleImageChoose(e);
+                            }}
+                            onBlur={onBlur}
+                          />
+                        )}
+                      />
+
                       <p
                         className={`text-xs text-gray-500 ${
                           cantidadImgExcedida && "text-red-500"
@@ -188,7 +227,8 @@ const PostSuenio = () => {
                               onClick={() =>
                                 setImagePreview((prev) =>
                                   prev.filter((img) => img !== imageUrl)
-                                )
+                                )   
+                           
                               }
                             >
                               <ClearIcon className="text-4xl" />
@@ -202,14 +242,6 @@ const PostSuenio = () => {
                   </Button>
                 </form>
               </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
-              </ModalFooter>
             </>
           )}
         </ModalContent>

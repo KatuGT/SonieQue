@@ -9,6 +9,7 @@ import { app } from "@/utils/firebase";
 const storage = getStorage(app);
 
 export const uploadImages = async (files: FileList) => {
+  
   const uploadPromises = Array.from(files).map((file) => {
 
     const newName = new Date().getTime() + "-image";
