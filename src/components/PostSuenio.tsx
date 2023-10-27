@@ -7,6 +7,8 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  CheckboxGroup,
+  Checkbox,
 } from "@nextui-org/react";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useEffect, useRef, useState } from "react";
@@ -16,20 +18,19 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { uploadImages } from "@/utils/uploadImages";
+import CheckboxTag from "./CheckboxTag";
+import { filtros } from "@/utils/filtros";
 
 interface PostSuenioProps {
   texto: string;
   imagenes: any;
+  tags: string[];
 }
 
 const PostSuenio = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const handleButtonClick = () => {
-    inputRef?.current?.click();
-  };
 
   const [imagePreview, setImagePreview] = useState<string[]>([]);
 
@@ -39,15 +40,15 @@ const PostSuenio = () => {
 
   const [archivosParaSubir, setArchivosParaSubir] = useState<any>();
 
-  const handleImageChoose = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChosenImagen = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e?.target?.files;
 
     const minPX = 500;
     const maxPX = 1200;
 
-    if (files && files?.length >= 3) {
+    if ((files && files?.length >= 4) || imagePreview.length >= 3) {
       setCantidadImgExcedida(true);
-    } else if (files && files?.length < 3) {
+    } else if (files && files?.length <= 3) {
       setCantidadImgExcedida(false);
 
       const filesArray = Array.from(files);
@@ -81,6 +82,7 @@ const PostSuenio = () => {
       .min(20, "Muy corto, contanos algo interesante")
       .max(1200, "Muy largooo, máximo 1200 caracteres"),
     imagenes: z.any(),
+    tags: z.array(z.string()),
   });
 
   const {
@@ -90,30 +92,44 @@ const PostSuenio = () => {
     formState: { errors, isSubmitSuccessful },
   } = useForm<PostSuenioProps>({
     resolver: zodResolver(postSueniosSchema),
+    defaultValues: {
+      texto: "",
+      imagenes: null,
+      tags: [],
+    },
   });
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset({ texto: "", imagenes: null });
+      reset({ texto: "", imagenes: null, tags: [] });
       setImagePreview([]);
       setArchivosParaSubir(null);
     }
   }, [isSubmitSuccessful, reset]);
 
   const onSubmitLogin = async (data: PostSuenioProps) => {
-    const { texto } = data;
+    const { texto, tags } = data;
+    console.log(tags);
     console.log(texto);
 
     try {
       if (archivosParaSubir) {
-        const imageURLs = await uploadImages(archivosParaSubir);
-        console.log(imageURLs);
+        // const imageURLs = await uploadImages(archivosParaSubir);
+        console.log(archivosParaSubir);
+        setTamanioIncorrecto(false);
+        setCantidadImgExcedida(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);      
+    }
+    reset({ imagenes: null, texto: "", tags: [] })
   };
 
-  console.log(archivosParaSubir);
-  
+  const resetForm = () => {
+    reset({ imagenes: null, texto: "", tags: [] }), setImagePreview([]);
+    setArchivosParaSubir([]);
+  };
+
   return (
     <>
       <Button onPress={onOpen}>Contanos que soñaste</Button>
@@ -157,7 +173,10 @@ const PostSuenio = () => {
                   )}
                   <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-1">
-                      <label htmlFor="botonImagen">
+                      <span className="text-xs text-gray-500">
+                        Imagenes opcionales*
+                      </span>
+                      <label htmlFor="botonImagen" className="cursor-pointer">
                         <Button
                           startContent={<AddAPhotoIcon />}
                           variant="ghost"
@@ -186,7 +205,7 @@ const PostSuenio = () => {
                             capture
                             onChange={(e) => {
                               onChange(e);
-                              handleImageChoose(e);
+                              handleChosenImagen(e);
                             }}
                             onBlur={onBlur}
                           />
@@ -227,8 +246,7 @@ const PostSuenio = () => {
                               onClick={() =>
                                 setImagePreview((prev) =>
                                   prev.filter((img) => img !== imageUrl)
-                                )   
-                           
+                                )
                               }
                             >
                               <ClearIcon className="text-4xl" />
@@ -236,9 +254,36 @@ const PostSuenio = () => {
                           </figure>
                         ))}
                     </div>
+                    <CheckboxGroup
+                      label="Select cities"
+                      orientation="horizontal"
+                      color="secondary"
+                      defaultValue={["buenos-aires", "san-francisco"]}
+                    >
+                      {filtros.map((tag, index) => {
+                        return (
+                          <Controller
+                            key={index}
+                            control={control}
+                            name="tags"
+                            render={(field) => (
+                              <CheckboxTag
+                                {...field}
+                                key={index}
+                                color={tag.color}
+                                texto={tag.key}
+                              />
+                            )}
+                          />
+                        );
+                      })}
+                    </CheckboxGroup>
                   </div>
-                  <Button color="danger" variant="light" type="submit">
-                    enviar
+                  <Button color="secondary" variant="light" type="submit">
+                    Enviar
+                  </Button>
+                  <Button color="warning" variant="light" onClick={resetForm}>
+                    Borrar
                   </Button>
                 </form>
               </ModalBody>

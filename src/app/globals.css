@@ -64,3 +64,11 @@ body {
 .textAreaPostSuenio .flex {
   display: none;
 }
+
+.checkboxTag svg{
+  display: none;
+}
+
+.checkboxTag input[type="checkbox"]:checked + div svg {
+  display: inline-block;
+}
