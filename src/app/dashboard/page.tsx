@@ -23,10 +23,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddIcon from "@mui/icons-material/Add";
 
 const columns = [
-  { name: "NAME", uid: "name", sortable: true },
-  { name: "ROLE", uid: "role", sortable: true },
-  { name: "STATUS", uid: "status", sortable: true },
-  { name: "ACTIONS", uid: "actions" },
+  { name: "Nombre", uid: "name", sortable: true },
+  { name: "Rol", uid: "role", sortable: true },
+  { name: "Estatus", uid: "status", sortable: true },
+  { name: "Acciones", uid: "actions" },
 ];
 
 const statusOptions = [
@@ -354,9 +354,8 @@ const Page = () => {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
+                <DropdownItem>Suspender</DropdownItem>
+                <DropdownItem>Borrar</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -407,7 +406,7 @@ const Page = () => {
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
+            placeholder="Buscar por nombre..."
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
@@ -438,9 +437,6 @@ const Page = () => {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<AddIcon />}>
-              Add New
-            </Button>
           </div>
         </div>
         <div className="flex justify-between items-center">

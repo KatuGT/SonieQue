@@ -27,13 +27,13 @@ export const linksUserConf: NavbarArrayProps[] = [
 
 export const linksDashboard: NavbarArrayProps[] = [
   {
-    href: "usuarios",
+    href: "/dashboard",
     icon: <TableChartIcon className="text-md" />,
     text: "Usuarios",
     rootPath: "/dashboard",
   },
   {
-    href: "estadisticas",
+    href: "dashboard/estadisticas",
     icon: <TimelineIcon className="text-md" />,
     text: "Estadisticas",
     rootPath: "/dashboard",
