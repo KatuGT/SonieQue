@@ -6,6 +6,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { PiArrowFatUpFill, PiArrowFatDownFill } from "react-icons/pi";
 import NextLink from "next/link";
 import LoyaltyIcon from "@mui/icons-material/Loyalty";
+import { MagicMotion } from "react-magic-motion";
 
 const CardSuenio = ({ suenio }: { suenio: string }) => {
   const [verMas, setVerMas] = useState(false);
@@ -91,36 +92,40 @@ const CardSuenio = ({ suenio }: { suenio: string }) => {
           </Button>
         </div>
       </header>
-      <main className="p-4 bg-gray-800 ">
-        <User
-          name="Jane Doe"
-          description="hace 6 horas"
-          avatarProps={{
-            src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-          }}
-        />
-        <p
-          className={`transition-all duration-75 ease-in-out ${
-            !verMas ? "line-clamp-[8]" : "line-clamp-none"
-          }`}
-          ref={text}
-        >
-          {suenio}
-        </p>
-        <div className="flex justify-center">
-          {textoLargo && (
-            <Button
-              onClick={() => setVerMas(!verMas)}
-              size="sm"
-              variant="light"
-              color="primary"
-              className="mt-4 mx-auto"
-            >
-              {verMas ? "Ver menos" : "Ver mas"}
-            </Button>
-          )}
-        </div>
-      </main>
+      <MagicMotion>
+        <main className="p-4 bg-gray-800 ">
+          <User
+            name="Jane Doe"
+            description="hace 6 horas"
+            className="text-gray-200 "
+            avatarProps={{
+              src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+            }}
+            key="exclude"
+          />
+          <p
+            className={`transition-all duration-75 ease-in-out text-gray-200 ${
+              !verMas ? "line-clamp-[8]" : "line-clamp-none"
+            }`}
+            ref={text}
+          >
+            {suenio}
+          </p>
+          <div className="flex justify-center" key="exclude">
+            {textoLargo && (
+              <Button
+                onClick={() => setVerMas(!verMas)}
+                size="sm"
+                variant="light"
+                color="primary"
+                className="mt-4 mx-auto"
+              >
+                {verMas ? "Ver menos" : "Ver mas"}
+              </Button>
+            )}
+          </div>
+        </main>
+      </MagicMotion>
       <footer className="px-4 py-2 backdrop-blur-sm bg-white/30  bg-gray-700 flex gap-2 flex-wrap">
         <Chip color="default">Caía</Chip>
         <Chip color="primary">volaba</Chip>

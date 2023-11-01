@@ -7,12 +7,12 @@ const ComentariosSuenio = () => {
     <div className="px-3 py-2 bg-blue-950 rounded-lg">
       <div className={`flex justify-between`}>
         <User
-        
           name="Jane Doe"
           description="publicado hace 12 horas"
           avatarProps={{
             src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
           }}
+          className="text-gray-200"
         />
         <Button
           size="sm"
@@ -24,7 +24,7 @@ const ComentariosSuenio = () => {
           <PriorityHighIcon />
         </Button>
       </div>
-      <p>
+      <p className="text-gray-200">
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatem,
         dolores?
       </p>
