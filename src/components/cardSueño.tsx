@@ -95,12 +95,13 @@ const CardSuenio = ({ suenio }: { suenio: string }) => {
         <User
           name="Jane Doe"
           description="hace 6 horas"
+          className="text-gray-200 "
           avatarProps={{
             src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
           }}
         />
         <p
-          className={`transition-all duration-75 ease-in-out ${
+          className={`transition-all duration-75 ease-in-out text-gray-200 ${
             !verMas ? "line-clamp-[8]" : "line-clamp-none"
           }`}
           ref={text}

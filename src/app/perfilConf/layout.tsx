@@ -7,7 +7,7 @@ import { linksUserConf } from "@/utils/navsItems";
 const LayoutPerfilConf = ({ children }: { children: React.ReactNode }) => {
 
   return (
-    <section className="flex flex-col md:flex-row mx-auto max-w-6xl gap-4">
+    <section className="flex flex-col md:flex-row mx-auto max-w-6xl gap-4 text-gray-200">
       <BarraLateral ArrayLinks={linksUserConf} />
       <div className="flex-[4]">{children}</div>
     </section>

@@ -6,7 +6,7 @@ import React from "react";
 
 const Page = () => {
   return (
-    <section className="flex flex-col md:flex-row relative mx-auto max-w-6xl">
+    <section className="flex flex-col md:flex-row relative mx-auto max-w-6xl text-gray-200">
       <Login />
       <Divider className="my-10 md:hidden"/>
       <Registro />

@@ -50,8 +50,9 @@ const SuenioDetalle = () => {
             avatarProps={{
               src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
             }}
+            className="text-gray-200 "
           />
-          <p className="backdrop-blur-xl">
+          <p className="backdrop-blur-xl text-gray-200">
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
             Consequuntur fugiat cum consectetur quae officia dicta ullam,
             incidunt quasi provident non nulla unde nisi laborum nobis, ad
@@ -116,7 +117,7 @@ const SuenioDetalle = () => {
         </Chip>
       </div>
       <section>
-        <span className="text-xs mb-2">
+        <span className="text-xs mb-2 text-gray-200">
           Ilustraciones subidas por autor del sueño
         </span>
         <div className="flex gap-4">
@@ -144,6 +145,7 @@ const SuenioDetalle = () => {
           variant="bordered"
           label="Deja tu comentario aquí"
           labelPlacement="outside"
+          className="text-gray-200"
         />
         <Button className="mt-2" color="secondary">
           Enviar

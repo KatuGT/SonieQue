@@ -29,10 +29,10 @@ const UserAside = () => {
             src="https://i.pravatar.cc/150?u=a04258114e29026708c"
             isBordered
             color="secondary"
-            className="w-12 h-15 text-large"
+            className="w-12 h-15 text-large text-gray-200"
             radius="sm"
           />
-          <span className="break-all">katu93dev</span>
+          <span className="break-all text-gray-200 ">katu93dev</span>
         </div>
         <Divider className="my-4" />
         <Listbox variant="shadow" color="secondary" aria-label="Actions">
@@ -41,6 +41,7 @@ const UserAside = () => {
             startContent={<Person3Icon className="text-md" />}
             as={nextLink}
             href="/perfilConf/editar"
+            className="text-gray-200 "
           >
             Mi perfil
           </ListboxItem>
@@ -49,6 +50,7 @@ const UserAside = () => {
             startContent={<AutoAwesomeIcon className="text-md" />}
             as={nextLink}
             href="/perfilConf/misSuenios"
+            className="text-gray-200 "
           >
             Mis sueños
           </ListboxItem>
@@ -57,6 +59,7 @@ const UserAside = () => {
             startContent={<LoyaltyIcon className="text-md" />}
             href="/perfilConf/misFavoritos"
             as={nextLink}
+            className="text-gray-200 "
           >
             Mis favoritos
           </ListboxItem>
@@ -65,6 +68,7 @@ const UserAside = () => {
             startContent={<MeetingRoomIcon className="text-md" />}
             as={nextLink}
             href="auth"
+            className="text-gray-200"
           >
             Cerrar sesión
           </ListboxItem>
@@ -72,7 +76,12 @@ const UserAside = () => {
         <Divider className="my-4" />
 
         <Listbox variant="shadow" color="secondary" aria-label="Actions">
-          <ListboxItem key="sobreNosotros" href="/" as={nextLink}>
+          <ListboxItem
+            key="sobreNosotros"
+            href="/"
+            as={nextLink}
+            className="text-gray-200 "
+          >
             Sobre nosotros
           </ListboxItem>
         </Listbox>
