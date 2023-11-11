@@ -75,7 +75,8 @@ const EditarPerfil = () => {
         <Modal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          placement="top-center"
+          placement="top-center" 
+          className="text-gray-200"
         >
           <ModalContent>
             {(onClose) => (
