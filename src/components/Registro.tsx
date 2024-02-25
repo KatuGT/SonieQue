@@ -6,9 +6,10 @@ import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import axios from "axios";
 
 interface RegistroProps {
-  nombre: string;
+  nickName: string;
   email: string;
   password: string;
   passwordConfirm: string;
@@ -21,7 +22,7 @@ const Registro = () => {
 
   const registroSchema = z
     .object({
-      nombre: z
+      nickName: z
         .string()
         .min(4, "Mínimo 4 caracteres")
         .max(15, "Máximo 15 carácteres"),
@@ -34,7 +35,6 @@ const Registro = () => {
     .required()
     .refine((data) => data.password === data.passwordConfirm, {
       message: "Las contraselas no coinciden",
-      path: ["passwordConfirm"],
     });
 
   const {
@@ -53,9 +53,20 @@ const Registro = () => {
 
   const router = useRouter();
 
-  const onSubmitRegistro = (data: RegistroProps) => {
+  console.log(errors);
+
+  const onSubmitRegistro = async (data: RegistroProps) => {
     console.log(data);
-    router.push("/");
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/signup",
+        data
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -70,9 +81,9 @@ const Registro = () => {
           type="text"
           label="Nombre"
           color="secondary"
-          isInvalid={!!errors?.nombre?.message}
-          errorMessage={errors?.nombre?.message}
-          {...register("nombre")}
+          isInvalid={!!errors?.nickName?.message}
+          errorMessage={errors?.nickName?.message}
+          {...register("nickName")}
         />
         <Input
           size={"sm"}
