@@ -72,3 +72,7 @@ body {
 .checkboxTag input[type="checkbox"]:checked + div svg {
   display: inline-block;
 }
+
+.balance{
+  text-wrap: balance;
+}

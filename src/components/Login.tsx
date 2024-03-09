@@ -7,10 +7,11 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { axiosInstance } from "@/utils/axiosInstance";
 
 interface LoginProps {
   email: string;
-  password: string;
+  loginKey: string;
 }
 
 const Login = () => {
@@ -21,7 +22,7 @@ const Login = () => {
   const loginSchema = z
     .object({
       email: z.string().email("Ingresa un e-mail valido."),
-      password: z.string().min(8, "Contraseña incorrecta"),
+      loginKey: z.string().min(8, "Contraseña incorrecta"),
     })
     .required();
 
@@ -35,9 +36,15 @@ const Login = () => {
 
   const router = useRouter();
 
-  const onSubmitLogin = (data: LoginProps) => {
-    console.log(data);
-    router.push("/");
+  const onSubmitLogin = async (data: LoginProps) => {
+    try {
+      const response = await axiosInstance.get("/login", data);
+
+      console.log(response);
+    } catch (error) {
+      console.error("Error al logearte", error);
+    }
+    // router.push("/");
   };
 
   return (
@@ -82,9 +89,9 @@ const Login = () => {
               )}
             </button>
           }
-          isInvalid={!!errors?.password?.message}
-          errorMessage={errors?.password?.message}
-          {...register("password")}
+          isInvalid={!!errors?.loginKey?.message}
+          errorMessage={errors?.loginKey?.message}
+          {...register("loginKey")}
         />
         <Button variant="solid" type="submit" color="secondary">
           Ingresar
