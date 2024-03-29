@@ -13,6 +13,11 @@ import { useEffect } from "react";
 export default function Home() {
   const { data, error, isLoading } = useUser()
 
+  console.log(data);
+  console.log(error);
+  console.log(isLoading);
+  
+
   return (
     <main className="max-w-6xl px-5 flex-row mx-auto flex gap-10 flex-wrap ">
       <aside className="flex-1 md:flex-[2]">
