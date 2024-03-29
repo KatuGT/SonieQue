@@ -1,8 +1,8 @@
 "use client";
+ 
 import Login from "@/components/Login";
 import Registro from "@/components/Registro";
 import { Divider } from "@nextui-org/react";
-import React from "react";
 
 const Page = () => {
   return (
