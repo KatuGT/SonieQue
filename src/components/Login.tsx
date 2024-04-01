@@ -1,16 +1,21 @@
+"use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Input } from "@nextui-org/react";
+import { Input, Button, Checkbox } from "@nextui-org/react";
 import BotonLoginConRed from "./BotonLoginConRed";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { axiosInstance } from "@/utils/axiosInstance";
+import Cookies from "js-cookie";
+import axios, { AxiosError } from "axios";
 
 interface LoginProps {
   email: string;
-  password: string;
+  loginKey: string;
+  recordarme: boolean;
 }
 
 const Login = () => {
@@ -21,7 +26,8 @@ const Login = () => {
   const loginSchema = z
     .object({
       email: z.string().email("Ingresa un e-mail valido."),
-      password: z.string().min(8, "Contraseña incorrecta"),
+      loginKey: z.string().min(8, "Contraseña incorrecta"),
+      recordarme: z.boolean().default(false),
     })
     .required();
 
@@ -34,10 +40,31 @@ const Login = () => {
   });
 
   const router = useRouter();
+  const [error, setError] = useState("");
 
-  const onSubmitLogin = (data: LoginProps) => {
-    console.log(data);
-    router.push("/");
+  const onSubmitLogin = async (data: LoginProps) => {
+    setError("");
+    try {
+      const response = await axiosInstance.post("/login", data);
+
+      console.log(response);
+      if (response?.status === 200) {
+        if (data.recordarme) {
+          Cookies.set("token", response.data.token, { expires: 30 });
+        } else {
+          Cookies.set("token", response.data.token);
+        }
+        router.push("/");
+      }
+    } catch (error) {
+      console.log("Error al logearte", error);
+
+      if (axios.isAxiosError(error)) {
+        setError(error?.response?.data?.description);
+      } else {
+        setError("Error desconocido");
+      }
+    }
   };
 
   return (
@@ -82,13 +109,16 @@ const Login = () => {
               )}
             </button>
           }
-          isInvalid={!!errors?.password?.message}
-          errorMessage={errors?.password?.message}
-          {...register("password")}
+          isInvalid={!!errors?.loginKey?.message}
+          errorMessage={errors?.loginKey?.message}
+          {...register("loginKey")}
         />
+
+        <Checkbox>Recordarme</Checkbox>
         <Button variant="solid" type="submit" color="secondary">
           Ingresar
         </Button>
+        {error && <p className="text-red-500">{error}</p>}
       </form>
     </div>
   );

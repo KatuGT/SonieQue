@@ -1,12 +1,14 @@
+"use client"
 import { Button, Input } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import axios from "axios";
+import { AxiosError } from "axios";
+import { axiosInstance } from "@/utils/axiosInstance";
+import JSConfetti from "js-confetti";
 
 interface RegistroProps {
   nickName: string;
@@ -16,6 +18,15 @@ interface RegistroProps {
 }
 
 const Registro = () => {
+
+  useEffect(() => {
+    async function getLoader() {
+      const { squircle } = await import('ldrs')
+      squircle.register()
+    }
+    getLoader()
+  }, [])
+
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -34,13 +45,14 @@ const Registro = () => {
     })
     .required()
     .refine((data) => data.password === data.passwordConfirm, {
-      message: "Las contraselas no coinciden",
+      message: "Las contraseñas no coinciden",
     });
 
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<RegistroProps>({
     resolver: zodResolver(registroSchema),
@@ -51,21 +63,33 @@ const Registro = () => {
     name: "password",
   });
 
-  const router = useRouter();
+  const [confirmEmail, setConfirmEmail] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  console.log(errors);
 
+  
   const onSubmitRegistro = async (data: RegistroProps) => {
-    console.log(data);
-
+    const jsConfetti = new JSConfetti();
+    setError("");
+    setIsLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/signup",
-        data
-      );
-      console.log(response);
+      const response = await axiosInstance.post("/signup", data);
+      if (response.status === 201) {
+
+        jsConfetti.addConfetti();
+
+        setIsLoading(false);
+        reset();
+        setConfirmEmail(true);
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Error al registrarse", error);
+      setIsLoading(false);
+      setConfirmEmail(false);
+      if (error instanceof AxiosError) {
+        setError(error?.response?.data);
+      }
     }
   };
 
@@ -174,9 +198,33 @@ const Registro = () => {
           </ul>
         </section>
         <Button variant="solid" type="submit" color="secondary">
-          Registrate
+          {isLoading ? (
+            <>
+              <l-squircle
+                size="20"
+                stroke="5"
+                stroke-length="0.15"
+                bg-opacity="0.1"
+                speed="0.9"
+                color="white"
+              ></l-squircle>
+
+              <span>Procesando...</span>
+            </>
+          ) : (
+            "Registrate"
+          )}
         </Button>
       </form>
+      {confirmEmail && (
+        <p className="max-w-md text-center balance">
+          Registro exitoso, solo falta que revises tu email para y confirmar
+        </p>
+      )}
+
+      {error && (
+        <p className="max-w-md text-center balance text-red-500">{error}</p>
+      )}
     </div>
   );
 };

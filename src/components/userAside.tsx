@@ -1,3 +1,4 @@
+"use client";
 import {
   Listbox,
   ListboxItem,
@@ -16,62 +17,101 @@ import LoyaltyIcon from "@mui/icons-material/Loyalty";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import nextLink from "next/link";
 import Person3Icon from "@mui/icons-material/Person3";
+import useUser from "@/customHooks/useUser";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const UserAside = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const { data, isLoading } = useUser();
+
+  const router = useRouter();
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    router.refresh();
+  };
+
+  const profileImage = data?.imageProfile
+    ? data?.imageProfile
+    : "/profile-pictures/anonimo-1.jpeg";
 
   return (
     <div>
       {/* Versión mobile */}
       <div className="hidden md:block">
-        <div className="flex items-center gap-4">
-          <Avatar
-            src="https://i.pravatar.cc/150?u=a04258114e29026708c"
-            isBordered
-            color="secondary"
-            className="w-12 h-15 text-large text-gray-200"
-            radius="sm"
-          />
-          <span className="break-all text-gray-200 ">katu93dev</span>
-        </div>
+        {data && (
+          <div className="flex items-center gap-4">
+            <Avatar
+              src={profileImage}
+              isBordered
+              color="secondary"
+              className="w-12 h-15 text-large text-gray-200"
+              radius="sm"
+            />
+            <span className="break-all text-gray-200">
+              {data?.name ? data?.name : data?.email}
+            </span>
+          </div>
+        )}
         <Divider className="my-4" />
+
         <Listbox variant="shadow" color="secondary" aria-label="Actions">
-          <ListboxItem
-            key="editarPerfil"
-            startContent={<Person3Icon className="text-md" />}
-            as={nextLink}
-            href="/perfilConf/editar"
-            className="text-gray-200 "
-          >
-            Mi perfil
-          </ListboxItem>
-          <ListboxItem
-            key="misSuenios"
-            startContent={<AutoAwesomeIcon className="text-md" />}
-            as={nextLink}
-            href="/perfilConf/misSuenios"
-            className="text-gray-200 "
-          >
-            Mis sueños
-          </ListboxItem>
-          <ListboxItem
-            key="misFavoritos"
-            startContent={<LoyaltyIcon className="text-md" />}
-            href="/perfilConf/misFavoritos"
-            as={nextLink}
-            className="text-gray-200 "
-          >
-            Mis favoritos
-          </ListboxItem>
-          <ListboxItem
-            key="cerrarSesion"
-            startContent={<MeetingRoomIcon className="text-md" />}
-            as={nextLink}
-            href="auth"
-            className="text-gray-200"
-          >
-            Cerrar sesión
-          </ListboxItem>
+          {data && (
+            <ListboxItem
+              key="editarPerfil"
+              startContent={<Person3Icon className="text-md" />}
+              as={nextLink}
+              href="/perfilConf/editar"
+              className="text-gray-200 "
+            >
+              Mi perfil
+            </ListboxItem>
+          )}
+          {data && (
+            <ListboxItem
+              key="misSuenios"
+              startContent={<AutoAwesomeIcon className="text-md" />}
+              as={nextLink}
+              href="/perfilConf/misSuenios"
+              className="text-gray-200 "
+            >
+              Mis sueños
+            </ListboxItem>
+          )}
+          {data && (
+            <ListboxItem
+              key="misFavoritos"
+              startContent={<LoyaltyIcon className="text-md" />}
+              href="/perfilConf/misFavoritos"
+              as={nextLink}
+              className="text-gray-200 "
+            >
+              Mis favoritos
+            </ListboxItem>
+          )}
+
+          {data ? (
+            <ListboxItem
+              key="cerrarSesion"
+              startContent={<MeetingRoomIcon className="text-md" />}
+              className="text-gray-200"
+              onClick={handleLogout}
+            >
+              Cerrar sesión
+            </ListboxItem>
+          ) : (
+            <ListboxItem
+              key="cerrarSesion"
+              startContent={<MeetingRoomIcon className="text-md" />}
+              as={nextLink}
+              href="auth"
+              className="text-gray-200"
+            >
+              Iniciar sesión
+            </ListboxItem>
+          )}
         </Listbox>
         <Divider className="my-4" />
 
@@ -102,10 +142,12 @@ const UserAside = () => {
               <ModalBody className="py-5">
                 <div className="flex items-center gap-4">
                   <Avatar
-                    src="https://i.pravatar.cc/150?u=a04258114e29026708c"
+                    src={profileImage}
                     className="w-20 h-20 text-large mb-2 shrink-0"
                   />
-                  <span className="break-all">katu93dev</span>
+                  <span className="break-all">
+                    {data?.name ? data?.name : data?.email}
+                  </span>
                 </div>
                 <Divider className="my-2" />
                 <Listbox
@@ -113,38 +155,60 @@ const UserAside = () => {
                   color="secondary"
                   aria-label="Actions"
                 >
-                  <ListboxItem
-                    key="editarPerfil"
-                    startContent={<EditIcon className="text-md" />}
-                    as={nextLink}
-                    href="/perfilConf/editar"
-                  >
-                    Editar perfil
-                  </ListboxItem>
-                  <ListboxItem
-                    key="misSuenios"
-                    startContent={<AutoAwesomeIcon className="text-md" />}
-                    as={nextLink}
-                    href="/perfilConf/misSuenios"
-                  >
-                    Mis sueños
-                  </ListboxItem>
-                  <ListboxItem
-                    key="misFavoritos"
-                    startContent={<LoyaltyIcon className="text-md" />}
-                    as={nextLink}
-                    href="/perfilConf/misFavoritos"
-                  >
-                    Mis favoritos
-                  </ListboxItem>
-                  <ListboxItem
-                    key="cerrarSesion"
-                    startContent={<MeetingRoomIcon className="text-md" />}
-                    as={nextLink}
-                    href="auth"
-                  >
-                    Cerrar sesión
-                  </ListboxItem>
+                  {data && (
+                    <ListboxItem
+                      key="editarPerfil"
+                      startContent={<Person3Icon className="text-md" />}
+                      as={nextLink}
+                      href="/perfilConf/editar"
+                      className="text-gray-200 "
+                    >
+                      Mi perfil
+                    </ListboxItem>
+                  )}
+                  {data && (
+                    <ListboxItem
+                      key="misSuenios"
+                      startContent={<AutoAwesomeIcon className="text-md" />}
+                      as={nextLink}
+                      href="/perfilConf/misSuenios"
+                      className="text-gray-200 "
+                    >
+                      Mis sueños
+                    </ListboxItem>
+                  )}
+                  {data && (
+                    <ListboxItem
+                      key="misFavoritos"
+                      startContent={<LoyaltyIcon className="text-md" />}
+                      href="/perfilConf/misFavoritos"
+                      as={nextLink}
+                      className="text-gray-200 "
+                    >
+                      Mis favoritos
+                    </ListboxItem>
+                  )}
+
+                  {data ? (
+                    <ListboxItem
+                      key="cerrarSesion"
+                      startContent={<MeetingRoomIcon className="text-md" />}
+                      className="text-gray-200"
+                      onClick={handleLogout}
+                    >
+                      Cerrar sesión
+                    </ListboxItem>
+                  ) : (
+                    <ListboxItem
+                      key="cerrarSesion"
+                      startContent={<MeetingRoomIcon className="text-md" />}
+                      as={nextLink}
+                      href="auth"
+                      className="text-gray-200"
+                    >
+                      Iniciar sesión
+                    </ListboxItem>
+                  )}
                 </Listbox>
                 <Divider className="my-2" />
 

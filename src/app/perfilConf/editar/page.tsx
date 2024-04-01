@@ -21,10 +21,25 @@ import nextLink from "next/link";
 import MoodBadIcon from "@mui/icons-material/MoodBad";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import EditIcon from "@mui/icons-material/Edit";
+import useUser from "@/customHooks/useUser";
+import { formateadorFecha } from "@/utils/formatearFecha";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const EditarPerfil = () => {
-  
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { data } = useUser();
+
+  const profileImage = data?.imageProfile
+    ? data?.imageProfile
+    : "/profile-pictures/anonimo-1.jpeg";
+
+  const router = useRouter();
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    router.refresh();
+  };
 
   return (
     <div className="px-4 flex flex-col gap-4 backdrop-blur-sm p-1 rounded-sm overflow-hidden mb-10">
@@ -34,15 +49,17 @@ const EditarPerfil = () => {
           color="secondary"
           className="w-20 h-20 text-large"
           radius="sm"
-          src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
+          src={profileImage}
         />
         <div>
-          <h3 className="text-4xl">Katudev</h3>
-          <span className="text-xs">Miembro desde 16/10/2023</span>
+          <h3 className="text-4xl">{data?.name ? data?.name : data?.email}</h3>
+          <span className="text-xs">
+            Miembro desde {formateadorFecha(data?.creationDate)}
+          </span>
         </div>
       </section>
       <Chip color="warning" variant="dot">
-        E-mail: 93katu@gmail.com
+        E-mail: {data?.email}
       </Chip>
 
       <section>
@@ -75,7 +92,7 @@ const EditarPerfil = () => {
         <Modal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          placement="top-center" 
+          placement="top-center"
           className="text-gray-200"
         >
           <ModalContent>
@@ -143,6 +160,7 @@ const EditarPerfil = () => {
           color="default"
           variant="bordered"
           startContent={<MeetingRoomIcon />}
+          onClick={handleLogout}
         >
           Cerrar sesión
         </Button>
