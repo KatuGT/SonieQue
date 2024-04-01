@@ -1,23 +1,10 @@
 "use client";
-import Header from "@/components/header";
 import Filters from "@/components/filters";
 import CardSuenio from "@/components/cardSueño";
-import patron from "./../assets/imagenes/patronEstrellas.png";
 import UserAside from "@/components/userAside";
 import PostSuenio from "@/components/PostSuenio";
-import useUser from "@/customHooks/useUser";
-import { axiosInstance } from "@/utils/axiosInstance";
-import Cookies from "js-cookie";
-import { useEffect } from "react";
 
 export default function Home() {
-  const { data, error, isLoading } = useUser()
-
-  console.log(data);
-  console.log(error);
-  console.log(isLoading);
-  
-
   return (
     <main className="max-w-6xl px-5 flex-row mx-auto flex gap-10 flex-wrap ">
       <aside className="flex-1 md:flex-[2]">

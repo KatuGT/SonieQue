@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { axiosInstance } from "@/utils/axiosInstance";
 import Cookies from "js-cookie";
+import axios, { AxiosError } from "axios";
 
 interface LoginProps {
   email: string;
@@ -39,10 +40,10 @@ const Login = () => {
   });
 
   const router = useRouter();
+  const [error, setError] = useState("");
 
   const onSubmitLogin = async (data: LoginProps) => {
-    console.log(data);
-
+    setError("");
     try {
       const response = await axiosInstance.post("/login", data);
 
@@ -57,6 +58,12 @@ const Login = () => {
       }
     } catch (error) {
       console.log("Error al logearte", error);
+
+      if (axios.isAxiosError(error)) {
+        setError(error?.response?.data?.description);
+      } else {
+        setError("Error desconocido");
+      }
     }
   };
 
@@ -111,6 +118,7 @@ const Login = () => {
         <Button variant="solid" type="submit" color="secondary">
           Ingresar
         </Button>
+        {error && <p className="text-red-500">{error}</p>}
       </form>
     </div>
   );

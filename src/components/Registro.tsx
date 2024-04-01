@@ -3,11 +3,10 @@ import { Button, Input } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { axiosInstance } from "@/utils/axiosInstance";
 import JSConfetti from "js-confetti";
 

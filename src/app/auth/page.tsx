@@ -5,13 +5,34 @@ import Registro from "@/components/Registro";
 import useUser from "@/customHooks/useUser";
 import { Divider } from "@nextui-org/react";
 import { redirect } from "next/navigation";
+import { useEffect } from "react";
 
 const Page = () => {
+  useEffect(() => {
+    async function getLoader() {
+      const { squircle } = await import("ldrs");
+      squircle.register();
+    }
+    getLoader();
+  }, []);
+
   const { data, error, isLoading } = useUser();
 
   if (data) redirect("/");
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div>
+        <l-squircle
+          size="20"
+          stroke="5"
+          stroke-length="0.15"
+          bg-opacity="0.1"
+          speed="0.9"
+          color="white"
+        ></l-squircle>
+      </div>
+    );
 
   if (!data)
     return (

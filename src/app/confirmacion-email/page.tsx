@@ -4,14 +4,13 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 
 const ConfirmacionEmail = () => {
-  const param = useSearchParams();
-
-  const token = param.get("token");
-  console.log(token);
+ 
 
   const confirmRegister = async () => {
     try {
-      const response = await axiosInstance.post(`/confirm-registration?token=${token}`, );
+      const response = await axiosInstance.get(
+        `/confirm-registration?token=ed2c8949-53c5-4453-8d09-87b89bde784b`
+      );
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -19,9 +18,8 @@ const ConfirmacionEmail = () => {
   };
 
   useEffect(() => {
-      confirmRegister();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+    confirmRegister();
+  }, []);
 
   return <section className="max-w-6xl mx-auto"></section>;
 };
