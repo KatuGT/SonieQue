@@ -32,7 +32,7 @@ const LayoutPerfilConf = ({ children }: { children: React.ReactNode }) => {
   if (!mounted || isValidating)
     return (
       <section className="mx-auto max-w-6xl h-96 grid place-items-center ">
-        <LoadingIcon/>
+        <LoadingIcon />
       </section>
     );
 

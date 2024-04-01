@@ -14,14 +14,14 @@ const LoadingIcon = () => {
       <path
         className="track"
         fill="none"
-        stroke-width="5"
+        strokeWidth="5"
         pathLength="100"
         d="M0.37 18.5 C0.37 5.772 5.772 0.37 18.5 0.37 S36.63 5.772 36.63 18.5 S31.228 36.63 18.5 36.63 S0.37 31.228 0.37 18.5"
       ></path>
       <path
         className="car"
         fill="none"
-        stroke-width="5"
+        strokeWidth="5"
         pathLength="100"
         d="M0.37 18.5 C0.37 5.772 5.772 0.37 18.5 0.37 S36.63 5.772 36.63 18.5 S31.228 36.63 18.5 36.63 S0.37 31.228 0.37 18.5"
       ></path>
