@@ -1,27 +1,39 @@
+"use client"
 import { Button, Input } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { AxiosError } from "axios";
+import { axiosInstance } from "@/utils/axiosInstance";
+import JSConfetti from "js-confetti";
 
 interface RegistroProps {
-  nombre: string;
+  nickName: string;
   email: string;
   password: string;
   passwordConfirm: string;
 }
 
 const Registro = () => {
+
+  useEffect(() => {
+    async function getLoader() {
+      const { squircle } = await import('ldrs')
+      squircle.register()
+    }
+    getLoader()
+  }, [])
+
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const registroSchema = z
     .object({
-      nombre: z
+      nickName: z
         .string()
         .min(4, "Mínimo 4 caracteres")
         .max(15, "Máximo 15 carácteres"),
@@ -33,14 +45,14 @@ const Registro = () => {
     })
     .required()
     .refine((data) => data.password === data.passwordConfirm, {
-      message: "Las contraselas no coinciden",
-      path: ["passwordConfirm"],
+      message: "Las contraseñas no coinciden",
     });
 
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<RegistroProps>({
     resolver: zodResolver(registroSchema),
@@ -51,11 +63,34 @@ const Registro = () => {
     name: "password",
   });
 
-  const router = useRouter();
+  const [confirmEmail, setConfirmEmail] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const onSubmitRegistro = (data: RegistroProps) => {
-    console.log(data);
-    router.push("/");
+
+  
+  const onSubmitRegistro = async (data: RegistroProps) => {
+    const jsConfetti = new JSConfetti();
+    setError("");
+    setIsLoading(true);
+    try {
+      const response = await axiosInstance.post("/signup", data);
+      if (response.status === 201) {
+
+        jsConfetti.addConfetti();
+
+        setIsLoading(false);
+        reset();
+        setConfirmEmail(true);
+      }
+    } catch (error) {
+      console.error("Error al registrarse", error);
+      setIsLoading(false);
+      setConfirmEmail(false);
+      if (error instanceof AxiosError) {
+        setError(error?.response?.data);
+      }
+    }
   };
 
   return (
@@ -70,9 +105,9 @@ const Registro = () => {
           type="text"
           label="Nombre"
           color="secondary"
-          isInvalid={!!errors?.nombre?.message}
-          errorMessage={errors?.nombre?.message}
-          {...register("nombre")}
+          isInvalid={!!errors?.nickName?.message}
+          errorMessage={errors?.nickName?.message}
+          {...register("nickName")}
         />
         <Input
           size={"sm"}
@@ -163,9 +198,33 @@ const Registro = () => {
           </ul>
         </section>
         <Button variant="solid" type="submit" color="secondary">
-          Registrate
+          {isLoading ? (
+            <>
+              <l-squircle
+                size="20"
+                stroke="5"
+                stroke-length="0.15"
+                bg-opacity="0.1"
+                speed="0.9"
+                color="white"
+              ></l-squircle>
+
+              <span>Procesando...</span>
+            </>
+          ) : (
+            "Registrate"
+          )}
         </Button>
       </form>
+      {confirmEmail && (
+        <p className="max-w-md text-center balance">
+          Registro exitoso, solo falta que revises tu email para y confirmar
+        </p>
+      )}
+
+      {error && (
+        <p className="max-w-md text-center balance text-red-500">{error}</p>
+      )}
     </div>
   );
 };

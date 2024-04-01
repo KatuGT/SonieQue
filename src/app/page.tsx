@@ -1,10 +1,9 @@
 "use client";
-import Header from "@/components/header";
 import Filters from "@/components/filters";
 import CardSuenio from "@/components/cardSueño";
-import patron from "./../assets/imagenes/patronEstrellas.png";
 import UserAside from "@/components/userAside";
 import PostSuenio from "@/components/PostSuenio";
+
 export default function Home() {
   return (
     <main className="max-w-6xl px-5 flex-row mx-auto flex gap-10 flex-wrap ">
