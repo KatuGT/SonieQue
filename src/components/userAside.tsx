@@ -51,7 +51,7 @@ const UserAside = () => {
               radius="sm"
             />
             <span className="break-all text-gray-200">
-              {data?.name ? data?.name : data?.email}
+              {data?.nickName ? data?.nickName : data?.email}
             </span>
           </div>
         )}
@@ -146,7 +146,7 @@ const UserAside = () => {
                     className="w-20 h-20 text-large mb-2 shrink-0"
                   />
                   <span className="break-all">
-                    {data?.name ? data?.name : data?.email}
+                    {data?.nickName ? data?.nickName : data?.email}
                   </span>
                 </div>
                 <Divider className="my-2" />

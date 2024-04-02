@@ -2,17 +2,9 @@
 import {
   Avatar,
   Button,
-  Radio,
   Chip,
   Divider,
-  Input,
   Link,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  RadioGroup,
   Spacer,
   Tooltip,
   useDisclosure,
@@ -25,6 +17,8 @@ import useUser from "@/customHooks/useUser";
 import { formateadorFecha } from "@/utils/formatearFecha";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import useUserSuenios from "@/customHooks/useSuenios";
+import ModalEditarUser from "@/components/ModalEditarUser";
 
 const EditarPerfil = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -33,6 +27,10 @@ const EditarPerfil = () => {
   const profileImage = data?.imageProfile
     ? data?.imageProfile
     : "/profile-pictures/anonimo-1.jpeg";
+
+  const { suenios } = useUserSuenios();
+
+  console.log(data);
 
   const router = useRouter();
 
@@ -52,7 +50,7 @@ const EditarPerfil = () => {
           src={profileImage}
         />
         <div>
-          <h3 className="text-4xl">{data?.name ? data?.name : data?.email}</h3>
+          <h3 className="text-4xl">{data?.nickName ? data?.nickName : data?.email}</h3>
           <span className="text-xs">
             Miembro desde {formateadorFecha(data?.creationDate)}
           </span>
@@ -64,7 +62,7 @@ const EditarPerfil = () => {
 
       <section>
         <p>
-          Haz publicado{" "}
+          Has publicado{" "}
           <Link as={nextLink} href="misSuenios">
             0 sueños
           </Link>{" "}
@@ -89,70 +87,11 @@ const EditarPerfil = () => {
         Editar
       </Button>
       <>
-        <Modal
+        <ModalEditarUser
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          placement="top-center"
-          className="text-gray-200"
-        >
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  Editá tu perfil
-                </ModalHeader>
-                <ModalBody>
-                  <Avatar
-                    isBordered
-                    color="secondary"
-                    className="w-20 h-20 text-large"
-                    radius="sm"
-                    src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
-                  />
-                  <Input
-                    autoFocus
-                    endContent={
-                      <EditIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                    }
-                    label="Imagen de perfil"
-                    placeholder="Katudev"
-                    variant="bordered"
-                    type="file"
-                  />
-                  <RadioGroup
-                    label="Color de borde"
-                    orientation="horizontal"
-                    color="secondary"
-                  >
-                    <Radio value="default">Gris</Radio>
-                    <Radio value="primary">Azul</Radio>
-                    <Radio value="secondary">Lila</Radio>
-                    <Radio value="success">Verde</Radio>
-                    <Radio value="warning">Amarillo</Radio>
-                    <Radio value="danger">Rojo</Radio>
-                  </RadioGroup>
-                  <Input
-                    autoFocus
-                    endContent={
-                      <EditIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                    }
-                    label="Nombre / Apodo"
-                    placeholder="Katudev"
-                    variant="bordered"
-                  />
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="danger" variant="flat" onPress={onClose}>
-                    Cancelar
-                  </Button>
-                  <Button color="primary" onPress={onClose}>
-                    Guardar
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
+          currentUserDAta={data}
+        />
       </>
       <Divider />
       <div className="flex flex-col items-start">

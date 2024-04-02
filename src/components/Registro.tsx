@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Button, Input } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -9,6 +9,7 @@ import * as z from "zod";
 import { AxiosError } from "axios";
 import { axiosInstance } from "@/utils/axiosInstance";
 import JSConfetti from "js-confetti";
+import { registroSchema } from "@/utils/formulSchemas/registroSchema";
 
 interface RegistroProps {
   nickName: string;
@@ -18,35 +19,17 @@ interface RegistroProps {
 }
 
 const Registro = () => {
-
   useEffect(() => {
     async function getLoader() {
-      const { squircle } = await import('ldrs')
-      squircle.register()
+      const { squircle } = await import("ldrs");
+      squircle.register();
     }
-    getLoader()
-  }, [])
+    getLoader();
+  }, []);
 
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
-
-  const registroSchema = z
-    .object({
-      nickName: z
-        .string()
-        .min(4, "Mínimo 4 caracteres")
-        .max(15, "Máximo 15 carácteres"),
-      email: z.string().email("Ingresa un e-mail valido."),
-      password: z
-        .string()
-        .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*()?]).{8,}$/, "Ver requerimientos"),
-      passwordConfirm: z.string().min(8, "Contraseña incorrecta"),
-    })
-    .required()
-    .refine((data) => data.password === data.passwordConfirm, {
-      message: "Las contraseñas no coinciden",
-    });
 
   const {
     register,
@@ -67,8 +50,6 @@ const Registro = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-
-  
   const onSubmitRegistro = async (data: RegistroProps) => {
     const jsConfetti = new JSConfetti();
     setError("");
@@ -76,7 +57,6 @@ const Registro = () => {
     try {
       const response = await axiosInstance.post("/signup", data);
       if (response.status === 201) {
-
         jsConfetti.addConfetti();
 
         setIsLoading(false);
