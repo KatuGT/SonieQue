@@ -1,5 +1,7 @@
 "use client";
 import {
+  Accordion,
+  AccordionItem,
   Avatar,
   Button,
   Chip,
@@ -17,8 +19,8 @@ import useUser from "@/customHooks/useUser";
 import { formateadorFecha } from "@/utils/formatearFecha";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import UserEdit from "@/components/perfilConfig/editar/UserEdit";
 import useUserSuenios from "@/customHooks/useSuenios";
-import ModalEditarUser from "@/components/ModalEditarUser";
 
 const EditarPerfil = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -28,16 +30,14 @@ const EditarPerfil = () => {
     ? data?.imageProfile
     : "/profile-pictures/anonimo-1.jpeg";
 
-  const { suenios } = useUserSuenios();
-
-  console.log(data);
-
   const router = useRouter();
 
   const handleLogout = () => {
     Cookies.remove("token");
     router.refresh();
   };
+
+  const { suenios } = useUserSuenios();
 
   return (
     <div className="px-4 flex flex-col gap-4 backdrop-blur-sm p-1 rounded-sm overflow-hidden mb-10">
@@ -50,7 +50,9 @@ const EditarPerfil = () => {
           src={profileImage}
         />
         <div>
-          <h3 className="text-4xl">{data?.nickName ? data?.nickName : data?.email}</h3>
+          <h3 className="text-4xl">
+            {data?.nickName ? data?.nickName : data?.email}
+          </h3>
           <span className="text-xs">
             Miembro desde {formateadorFecha(data?.creationDate)}
           </span>
@@ -64,7 +66,7 @@ const EditarPerfil = () => {
         <p>
           Has publicado{" "}
           <Link as={nextLink} href="misSuenios">
-            0 sueños
+            {data?.postDreams?.length} sueños
           </Link>{" "}
           desde que te uniste
         </p>
@@ -77,23 +79,20 @@ const EditarPerfil = () => {
           en tu lista de favoritos
         </p>
       </section>
-      <Button
-        onPress={onOpen}
-        color="success"
-        className="self-start"
-        variant="bordered"
-        startContent={<EditIcon />}
-      >
-        Editar
-      </Button>
-      <>
-        <ModalEditarUser
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          currentUserDAta={data}
-        />
-      </>
+
+      <Accordion itemClasses={{ title: "text-success" }}>
+        <AccordionItem
+          key="1"
+          aria-label="Editar"
+          title="Editar"
+          startContent={<EditIcon className="text-success" />}
+        >
+          <UserEdit currentUserDAta={data} />
+        </AccordionItem>
+      </Accordion>
+
       <Divider />
+
       <div className="flex flex-col items-start">
         <Button
           color="default"

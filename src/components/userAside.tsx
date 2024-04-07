@@ -20,11 +20,10 @@ import Person3Icon from "@mui/icons-material/Person3";
 import useUser from "@/customHooks/useUser";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { userProps } from "@/tipos/userTipos";
 
-const UserAside = () => {
+const UserAside = ({ data }: { data: userProps }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const { data, isLoading } = useUser();
 
   const router = useRouter();
 
@@ -38,7 +37,7 @@ const UserAside = () => {
     : "/profile-pictures/anonimo-1.jpeg";
 
   return (
-    <div>
+    <aside>
       {/* Versión mobile */}
       <div className="hidden md:block">
         {data && (
@@ -46,7 +45,7 @@ const UserAside = () => {
             <Avatar
               src={profileImage}
               isBordered
-              color="secondary"
+              color={data?.borderColorImg ? data?.borderColorImg : "secondary"}
               className="w-12 h-15 text-large text-gray-200"
               radius="sm"
             />
@@ -226,7 +225,7 @@ const UserAside = () => {
           </ModalContent>
         </Modal>
       </div>
-    </div>
+    </aside>
   );
 };
 

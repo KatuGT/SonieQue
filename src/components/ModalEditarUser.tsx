@@ -49,9 +49,22 @@ const ModalEditarUser = ({
   const [error, setError] = useState("");
 
   const onSubmitEdit = async (data: userPatchProps) => {
-    console.log(data);
-
     setError("");
+    try {
+      const response = await axiosInstance.patch(
+        "/user/attribute_modification",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+        }
+      );
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const coloresBorde = [
@@ -97,7 +110,11 @@ const ModalEditarUser = ({
             <ModalBody>
               <Avatar
                 isBordered
-                color="secondary"
+                color={
+                  currentUserDAta?.borderColorImg
+                    ? currentUserDAta?.borderColorImg
+                    : "secondary"
+                }
                 className="w-20 h-20 text-large"
                 radius="sm"
                 src={profileImage}
@@ -150,7 +167,7 @@ const ModalEditarUser = ({
                       <EditIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                     }
                     label="Nombre / Apodo"
-                    placeholder="Katudev"
+                    placeholder={currentUserDAta?.nickName}
                     variant="bordered"
                     {...field}
                   />

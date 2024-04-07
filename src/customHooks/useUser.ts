@@ -23,7 +23,9 @@ const useUser = () => {
 
     const apiUrl = '/user/get_user_auth';
 
-    const { data, error, isLoading, isValidating, mutate } = useSWR(token ? apiUrl : null, fetcher);
+    const { data, error, isLoading, isValidating, mutate } = useSWR(token ? apiUrl : null, fetcher, {
+        revalidateOnFocus: false,
+    });
 
     return { data, error, isLoading, isValidating, mutate }
 }

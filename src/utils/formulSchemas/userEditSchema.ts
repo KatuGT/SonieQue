@@ -6,4 +6,4 @@ export const userEditSchema = z
         nickName: z.string().optional(),
         imageProfile: z.string().optional(),
         borderColorImg: z.string().optional(),
-    })
+})

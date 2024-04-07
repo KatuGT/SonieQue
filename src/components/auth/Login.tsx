@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input, Button, Checkbox } from "@nextui-org/react";
-import BotonLoginConRed from "./BotonLoginConRed";
+import BotonLoginConRed from "../BotonLoginConRed";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useForm } from "react-hook-form";
