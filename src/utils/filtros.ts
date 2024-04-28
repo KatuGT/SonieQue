@@ -13,42 +13,42 @@ interface FiltrosProps {
 
 export const filtros: FiltrosProps[] = [
   {
-    value: "caia",
+    value: "1",
     key: "caía",
     color: "default",
   },
   {
-    value: "hacia-pis",
+    value: "2",
     key: "hacia pís",
     color: "danger",
   },
   {
-    value: "volaba",
+    value: "3",
     key: "volaba",
     color: "primary",
   },
   {
-    value: "alguien-me-perseguia",
+    value: "4",
     key: "alguien me perseguía",
     color: "secondary",
   },
   {
-    value: "no-podia-correr",
+    value: "5",
     key: "no podía correr",
     color: "success",
   },
   {
-    value: "yo-moría",
+    value: "6",
     key: "yo moría",
     color: "warning",
   },
   {
-    value: "alguien-moria",
+    value: "7",
     key: "alguien moría",
     color: "success",
   },
   {
-    value: "alguien-muerto",
+    value: "8",
     key: "veía un muerto",
     color: "secondary",
   },

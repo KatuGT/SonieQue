@@ -9,6 +9,7 @@ import {
   useDisclosure,
   CheckboxGroup,
   Checkbox,
+  Input,
 } from "@nextui-org/react";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useEffect, useRef, useState } from "react";
@@ -20,17 +21,20 @@ import * as z from "zod";
 import { uploadImages } from "@/utils/uploadImages";
 import CheckboxTag from "./CheckboxTag";
 import { filtros } from "@/utils/filtros";
+import { axiosInstance } from "@/utils/axiosInstance";
+import Cookies from "js-cookie";
+import { postSueniosSchema } from "@/utils/formulSchemas/postSuenio";
 
 interface PostSuenioProps {
-  texto: string;
-  imagenes: any;
-  tags: string[];
+  story: string;
+  title: string;
+  anonymous: boolean;
+  images: any;
+  idCategory: string[];
 }
 
 const PostSuenio = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [imagePreview, setImagePreview] = useState<string[]>([]);
 
@@ -76,15 +80,6 @@ const PostSuenio = () => {
     }
   };
 
-  const postSueniosSchema = z.object({
-    texto: z
-      .string()
-      .min(20, "Muy corto, contanos algo interesante")
-      .max(1200, "Muy largooo, máximo 1200 caracteres"),
-    imagenes: z.any(),
-    tags: z.array(z.string()),
-  });
-
   const {
     handleSubmit,
     control,
@@ -93,24 +88,38 @@ const PostSuenio = () => {
   } = useForm<PostSuenioProps>({
     resolver: zodResolver(postSueniosSchema),
     defaultValues: {
-      texto: "",
-      imagenes: null,
-      tags: [],
+      title: "",
+      story: "",
+      anonymous: false,
+      images: "",
+      idCategory: [],
     },
   });
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset({ texto: "", imagenes: null, tags: [] });
+      reset({ story: "", images: null, idCategory: [] });
       setImagePreview([]);
       setArchivosParaSubir(null);
     }
   }, [isSubmitSuccessful, reset]);
 
+  const token = Cookies.get("token");
+
   const onSubmitLogin = async (data: PostSuenioProps) => {
-    const { texto, tags } = data;
-    console.log(tags);
-    console.log(texto);
+    const formdata = new FormData();
+
+    for (const key in data) {
+      const value = data[key as keyof PostSuenioProps];
+
+      if ((value !== null && !Array.isArray(value)) || key !== "tags") {
+        formdata.append(key, value.toString());
+      } else if (Array.isArray(value) && key === "tags") {
+        for (const tag of value) {
+          formdata.append(key, tag.toString());
+        }
+      }
+    }
 
     try {
       if (archivosParaSubir) {
@@ -119,14 +128,21 @@ const PostSuenio = () => {
         setTamanioIncorrecto(false);
         setCantidadImgExcedida(false);
       }
+
+      const response = await axiosInstance.post("/user/new_post", formdata, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response);
     } catch (error) {
-      console.log(error);      
+      console.log(error);
     }
-    reset({ imagenes: null, texto: "", tags: [] })
   };
 
   const resetForm = () => {
-    reset({ imagenes: null, texto: "", tags: [] }), setImagePreview([]);
+    reset({ images: null, story: "", idCategory: [] }), setImagePreview([]);
     setArchivosParaSubir([]);
   };
 
@@ -146,8 +162,28 @@ const PostSuenio = () => {
                   className="flex flex-col  gap-2"
                 >
                   <Controller
+                    name="title"
                     control={control}
-                    name="texto"
+                    render={({ field }) => (
+                      <Input
+                        autoFocus
+                        placeholder={"Título genial aquí"}
+                        variant="faded"
+                        color="secondary"
+                        style={{ width: "fit-content" }}
+                        {...field}
+                      />
+                    )}
+                  />
+                  {errors.title && (
+                    <p className="text-xs text-danger-300">
+                      {errors.title.message}
+                    </p>
+                  )}
+
+                  <Controller
+                    control={control}
+                    name="story"
                     render={({ field: { onChange, onBlur, value, ref } }) => (
                       <Textarea
                         ref={ref}
@@ -157,7 +193,7 @@ const PostSuenio = () => {
                         minRows={4}
                         maxRows={8}
                         color="secondary"
-                        isInvalid={!!errors.texto}
+                        isInvalid={!!errors.story}
                         isRequired={true}
                         onChange={onChange}
                         onBlur={onBlur}
@@ -166,15 +202,26 @@ const PostSuenio = () => {
                     )}
                   />
 
-                  {errors.texto && (
+                  {errors.story && (
                     <p className="text-xs text-danger-300">
-                      {errors.texto.message}
+                      {errors.story.message}
                     </p>
                   )}
+
+                  <Controller
+                    name="anonymous"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox onChange={onChange} isSelected={value}>
+                        Publicar anonimamente
+                      </Checkbox>
+                    )}
+                  />
+
                   <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-1">
                       <span className="text-xs text-gray-500">
-                        Imagenes opcionales*
+                        Imagen opcional*
                       </span>
                       <label htmlFor="botonImagen" className="cursor-pointer">
                         <Button
@@ -191,7 +238,7 @@ const PostSuenio = () => {
 
                       <Controller
                         control={control}
-                        name="imagenes"
+                        name="images"
                         render={({
                           field: { onChange, onBlur, value, ref },
                         }) => (
@@ -254,30 +301,36 @@ const PostSuenio = () => {
                           </figure>
                         ))}
                     </div>
+
                     <CheckboxGroup
-                      label="Select cities"
+                      label="Selecciona tags"
                       orientation="horizontal"
                       color="secondary"
-                      defaultValue={["buenos-aires", "san-francisco"]}
                     >
                       {filtros.map((tag, index) => {
                         return (
                           <Controller
                             key={index}
                             control={control}
-                            name="tags"
+                            name="idCategory"
                             render={(field) => (
                               <CheckboxTag
                                 {...field}
                                 key={index}
                                 color={tag.color}
                                 texto={tag.key}
+                                value={tag.value}
                               />
                             )}
                           />
                         );
                       })}
                     </CheckboxGroup>
+                    {errors.idCategory && (
+                      <p className="text-xs text-danger-300">
+                        {errors.idCategory.message}
+                      </p>
+                    )}
                   </div>
                   <Button color="secondary" variant="light" type="submit">
                     Enviar

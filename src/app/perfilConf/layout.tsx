@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import BarraLateral from "@/components/BarraLateral";
 import { linksUserConf } from "@/utils/navsItems";
 import useUser from "@/customHooks/useUser";
 import { redirect } from "next/navigation";
 import LoadingIcon from "../../../public/SVG/LoadingIcon";
+import BarraLateral from "@/components/perfilConfig/BarraLateral";
 
 const LayoutPerfilConf = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {

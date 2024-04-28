@@ -13,14 +13,15 @@ interface CheckboxTagProps {
     | "danger"
     | undefined;
   field: any;
+  value: string
 }
 
-const CheckboxTag = ({ color, texto, field }: CheckboxTagProps) => {
+const CheckboxTag = ({ color, texto, field, value }: CheckboxTagProps) => {
   const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
-    setIsChecked(field.value.includes(texto));
-  }, [field.value, texto]);
+    setIsChecked(field.value.includes(value));
+  }, [field.value, value]);
 
   const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value } = e.target;
@@ -39,7 +40,7 @@ const CheckboxTag = ({ color, texto, field }: CheckboxTagProps) => {
         className="hidden"
         onChange={handleCheckbox}
         checked={isChecked}
-        value={texto}
+        value={value}
         name="tags"
       />
       <Chip

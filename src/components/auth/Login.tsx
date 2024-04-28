@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input, Button, Checkbox } from "@nextui-org/react";
-import BotonLoginConRed from "./BotonLoginConRed";
+import BotonLoginConRed from "../BotonLoginConRed";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useForm } from "react-hook-form";
@@ -11,6 +11,7 @@ import * as z from "zod";
 import { axiosInstance } from "@/utils/axiosInstance";
 import Cookies from "js-cookie";
 import axios, { AxiosError } from "axios";
+import { loginSchema } from "@/utils/formulSchemas/loginSchema";
 
 interface LoginProps {
   email: string;
@@ -22,14 +23,6 @@ const Login = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
-
-  const loginSchema = z
-    .object({
-      email: z.string().email("Ingresa un e-mail valido."),
-      loginKey: z.string().min(8, "Contraseña incorrecta"),
-      recordarme: z.boolean().default(false),
-    })
-    .required();
 
   const {
     register,
@@ -47,7 +40,6 @@ const Login = () => {
     try {
       const response = await axiosInstance.post("/login", data);
 
-      console.log(response);
       if (response?.status === 200) {
         if (data.recordarme) {
           Cookies.set("token", response.data.token, { expires: 30 });
