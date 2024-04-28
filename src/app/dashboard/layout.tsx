@@ -1,4 +1,4 @@
-import BarraLateral from "@/components/BarraLateral";
+import BarraLateral from "@/components/perfilConfig/BarraLateral";
 import { linksDashboard } from "@/utils/navsItems";
 import React from "react";
 

@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
 import useSWR from 'swr'
 
-const useUser = () => {
+const useUserSuenios = () => {
 
     const token = Cookies.get('token');
 
@@ -21,13 +21,11 @@ const useUser = () => {
 
 
 
-    const apiUrl = '/user/get_user_auth';
+    const apiUrl = '/user/user_post';
 
-    const { data, error, isLoading, isValidating, mutate } = useSWR(token ? apiUrl : null, fetcher, {
-        revalidateOnFocus: false,
-    });
+    const { data: suenios, error: sueniosError, isLoading: sueniosIsLoading, isValidating: sueniosIsValidating, mutate } = useSWR(token ? apiUrl : null, fetcher);
 
-    return { data, error, isLoading, isValidating, mutate }
+    return { suenios, sueniosError, sueniosIsLoading, sueniosIsValidating, mutate }
 }
 
-export default useUser
+export default useUserSuenios

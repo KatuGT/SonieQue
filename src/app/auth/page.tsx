@@ -1,7 +1,7 @@
 "use client";
 
-import Login from "@/components/Login";
-import Registro from "@/components/Registro";
+import Login from "@/components/auth/Login";
+import Registro from "@/components/auth/Registro";
 import useUser from "@/customHooks/useUser";
 import { Divider } from "@nextui-org/react";
 import { redirect } from "next/navigation";
