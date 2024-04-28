@@ -8,7 +8,7 @@ import {
 } from "@nextui-org/react";
 import EditIcon from "@mui/icons-material/Edit";
 import { userProps } from "@/tipos/userTipos";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useController, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { axiosInstance } from "@/utils/axiosInstance";
@@ -23,8 +23,9 @@ import axios from "axios";
 
 interface userPatchProps {
   nickName: string;
-  imageProfile: string;
+  imageProfile: any;
   borderColorImg: string;
+  [key: string]: string;
 }
 
 const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
@@ -39,25 +40,26 @@ const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
 
   const [error, setError] = useState("");
 
+  const { field } = useController({ control, name: "imageProfile" });
+
   const onSubmitEdit = async (data: userPatchProps) => {
     setError("");
 
     console.log(data);
-
     const formData = new FormData();
 
-    // Agregar los campos y valores al objeto FormData
-    formData.append("borderColorImg", data.borderColorImg);
+    for (const key in data) {
+      formData.append(key, data[key]);
+    }
 
     try {
       const response = await axios.patch(
         "http://localhost:8080/api/user/attribute_modification",
-        formData, // Enviar FormData en lugar de dataToSend
+        formData,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
-            'Content-Type': 'multipart/form-data'
-
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -80,8 +82,8 @@ const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
       img.src = URL.createObjectURL(file);
       setImagenPreview(img.src);
 
-      const minPX = 300;
-      const maxPX = 1200;
+      const minPX = 768;
+      const maxPX = 2048;
 
       const width = img.width;
       const height = img.height;
@@ -107,24 +109,18 @@ const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
           <ScrollShadow className="h-[400px] mt-4">
             <RadioGroup orientation="horizontal">
               <span className="w-[140px] h-[168px] rounded-xl border-3 border-gray-700">
-                <Controller
-                  name="imageProfile"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      type="file"
-                      className="hidden w-full h-full"
-                      accept="image/*"
-                      capture
-                      id="subir-foto-perfil"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleChosenImagen(e);
-                      }}
-                    />
-                  )}
+                <input
+                  type="file"
+                  className="hidden w-full h-full"
+                  accept="image/*"
+                  capture
+                  id="subir-foto-perfil"
+                  onChange={(e) => {
+                    field.onChange(e.target.files && e.target.files[0]);
+                    handleChosenImagen(e);
+                  }}
                 />
+
                 {imagenPreview ? (
                   <>
                     <label
@@ -159,7 +155,11 @@ const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
               </span>
 
               {imagenesAnonimas.map((imagen, index) => (
-                <RadioButtonImage key={index} value={imagen.path}>
+                <RadioButtonImage
+                  key={index}
+                  value={imagen.path}
+                  onChange={() => setImagenPreview(imagen.path)}
+                >
                   <Image
                     alt="imagen de perfil"
                     src={imagen.path}
