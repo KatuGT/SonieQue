@@ -1,11 +1,12 @@
-import { create } from 'zustand'
+import { userProps } from "@/tipos/userTipos";
+import { create } from "zustand";
 
-interface userProps {
-  bears: number
-  increase: (by: number) => void
+interface UserState {
+  user: userProps | null;
+  setUser: (user: userProps | null) => void;
 }
 
-const useUserStore = create<userProps>()((set) => ({
-  bears: 0,
-  increase: (by) => set((state) => ({ bears: state.bears + by })),
-}))
+export const useUserStore = create<UserState>((set) => ({
+  user: null,
+  setUser: (user) => set({ user }),
+}));

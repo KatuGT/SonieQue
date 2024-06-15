@@ -4,7 +4,7 @@ export const postSueniosSchema = z.object({
     story: z
         .string()
         .min(100, "Muy corto, contanos algo interesante, minimo 100 carácteres.")
-        .max(300, "Muy largooo, máximo 300 caracteres"),
+        .max(1000, "Muy largooo, máximo 1000 caracteres"),
     title: z.string(),
     anonymous: z.boolean().default(false),
     imagenes: z.any(),

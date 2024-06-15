@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { Input, Button, Checkbox } from "@nextui-org/react";
 import BotonLoginConRed from "../BotonLoginConRed";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -12,6 +12,8 @@ import { axiosInstance } from "@/utils/axiosInstance";
 import Cookies from "js-cookie";
 import axios, { AxiosError } from "axios";
 import { loginSchema } from "@/utils/formulSchemas/loginSchema";
+import { useSWRConfig } from "swr";
+import { useUserStore } from "@/store/user";
 
 interface LoginProps {
   email: string;
@@ -35,6 +37,9 @@ const Login = () => {
   const router = useRouter();
   const [error, setError] = useState("");
 
+  const { mutate } = useSWRConfig();
+  const setUser = useUserStore((state) => state.setUser);
+
   const onSubmitLogin = async (data: LoginProps) => {
     setError("");
     try {
@@ -46,7 +51,20 @@ const Login = () => {
         } else {
           Cookies.set("token", response.data.token);
         }
-        router.push("/");
+
+        try {
+          const responseLogin = await axiosInstance("/user/get_user_auth", {
+            headers: { Authorization: `Bearer ${response.data.token}` },
+          });
+          if (responseLogin.status === 200) {
+            setUser(responseLogin.data);
+          }
+          mutate("/user/get_user_auth");
+          
+          router.push("/");
+        } catch (error) {
+          console.log(error);
+        }
       }
     } catch (error) {
       console.log("Error al logearte", error);
