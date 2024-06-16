@@ -1,6 +1,5 @@
 "use client";
-import CardSuenio from "@/components/cardSueño";
-import {
+ import {
   Button,
   Checkbox,
   CheckboxGroup,
@@ -18,6 +17,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
+import CardSuenio from "@/components/cardSuenio/cardSueño";
 
 const MisSuenios = () => {
   const [selected, setSelected] = useState("todos");
@@ -33,7 +33,7 @@ const MisSuenios = () => {
       </RadioGroup>
       <section className="grid gap-16">
         <div className="flex gap-4 flex-col md:flex-row">
-          <CardSuenio suenio="loremg g fdgd g dfgdfg" />
+          {/* <CardSuenio suenio="loremg g fdgd g dfgdfg" />{categorias.map((categoria: categoria) */}
           <div className="rounded-lg flex md:flex-col gap-2 ">
             <Button color="danger" variant="ghost" startContent={<ClearIcon />}>
               Borrar
@@ -51,7 +51,7 @@ const MisSuenios = () => {
         </div>
 
         <div className="flex gap-4 flex-col md:flex-row">
-          <CardSuenio suenio="loremg g fdgd g dfgdfg" />
+          {/* <CardSuenio suenio="loremg g fdgd g dfgdfg" /> */}
           <div className="rounded-lg flex md:flex-col gap-2 ">
             <Button color="danger" variant="ghost" startContent={<ClearIcon />}>
               Borrar

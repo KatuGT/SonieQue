@@ -1,5 +1,4 @@
 "use client";
-import CardSuenio from "@/components/cardSueño";
 import {
   Button,
   Checkbox,
@@ -18,6 +17,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
+import CardSuenio from "@/components/cardSuenio/cardSueño";
 
 const MisFavoritos = () => {
   const [selected, setSelected] = useState("todos");
@@ -33,7 +33,7 @@ const MisFavoritos = () => {
       </RadioGroup>
       <section className="grid gap-16">
         <div className="flex gap-4 flex-col">
-          <CardSuenio suenio="loremg g fdgd g dfgdfg" />
+          {/* <CardSuenio  suenio="loremg g fdgd g dfgdfg" /> */}
           <p className="text-xs text-gray-50">
             Agregado a favoritos hace 2 horas
           </p>

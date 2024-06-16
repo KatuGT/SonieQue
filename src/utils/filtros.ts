@@ -1,55 +1,57 @@
+import { colorCategoriaMap } from "./mapColoresCategorias";
+
 interface FiltrosProps {
   value: string;
   key: string;
   color:
-    | "default"
-    | "primary"
-    | "secondary"
-    | "success"
-    | "warning"
-    | "danger"
-    | undefined;
+  | "default"
+  | "primary"
+  | "secondary"
+  | "success"
+  | "warning"
+  | "danger"
+  | undefined;
 }
 
 export const filtros: FiltrosProps[] = [
   {
     value: "1",
     key: "caía",
-    color: "default",
+    color: colorCategoriaMap[1],
   },
   {
     value: "2",
     key: "hacia pís",
-    color: "danger",
+    color: colorCategoriaMap[2],
   },
   {
     value: "3",
     key: "volaba",
-    color: "primary",
+    color: colorCategoriaMap[3],
   },
   {
     value: "4",
     key: "alguien me perseguía",
-    color: "secondary",
+    color: colorCategoriaMap[4],
   },
   {
     value: "5",
     key: "no podía correr",
-    color: "success",
+    color: colorCategoriaMap[5],
   },
   {
     value: "6",
     key: "yo moría",
-    color: "warning",
+    color: colorCategoriaMap[6],
   },
   {
     value: "7",
     key: "alguien moría",
-    color: "success",
+    color: colorCategoriaMap[7],
   },
   {
     value: "8",
     key: "veía un muerto",
-    color: "secondary",
+    color: colorCategoriaMap[8],
   },
 ];

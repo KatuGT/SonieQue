@@ -7,8 +7,25 @@ import { PiArrowFatUpFill, PiArrowFatDownFill } from "react-icons/pi";
 import NextLink from "next/link";
 import LoyaltyIcon from "@mui/icons-material/Loyalty";
 import { MagicMotion } from "react-magic-motion";
+import { Tooltip } from "@nextui-org/tooltip";
+import { getTimeElapsedString } from "@/utils/getTimeCration";
+import { categoria } from "@/tipos/sueniosTipos";
+import LikesActions from "./LikesActions";
+import { colorCategoriaMap } from "@/utils/mapColoresCategorias";
 
-const CardSuenio = ({ suenio }: { suenio: string }) => {
+const CardSuenio = ({
+  suenio,
+  isUser,
+  fecha,
+  categorias,
+  suenioId,
+}: {
+  suenio: string;
+  isUser: Boolean;
+  fecha: string;
+  categorias: categoria[];
+  suenioId: number;
+}) => {
   const [verMas, setVerMas] = useState(false);
 
   const text = useRef<HTMLParagraphElement | null>(null);
@@ -39,64 +56,77 @@ const CardSuenio = ({ suenio }: { suenio: string }) => {
       <header className="flex justify-between items-center backdrop-blur-sm bg-white/30 px-4 py-2">
         <Link
           as={NextLink}
-          href="/suenioDetalle"
+          href={`/suenioDetalle/${suenioId}`}
           showAnchorIcon
           anchorIcon={<OpenInNewIcon />}
           color="foreground"
         >
-          #4560565
+          #{suenioId}
         </Link>
         <div className="flex gap-2">
-          <Button
-            isIconOnly
-            color="secondary"
-            variant={favorito ? "shadow" : "bordered"}
-            aria-label="Añadir a favoritos este sueño"
-            onClick={() => setFavorito(!favorito)}
-          >
-            <LoyaltyIcon />
-          </Button>
-          <div className="flex gap-1 flex-col justify-center items-center">
+          <Tooltip content={isUser ? "Guarda en favoritos" : "Inicia sesión"}>
             <Button
               isIconOnly
-              color="success"
-              variant={like === "like" ? "shadow" : "bordered"}
-              className="text-xl"
-              aria-label="Me gusta este sueño"
-              onClick={() => setLike("like")}
+              color="secondary"
+              variant={favorito ? "shadow" : "bordered"}
+              aria-label="Añadir a favoritos este sueño"
+              onClick={() => setFavorito(!favorito)}
+              disabled={!isUser}
             >
-              <PiArrowFatUpFill />
+              <LoyaltyIcon />
             </Button>
+          </Tooltip>
+          <LikesActions postId={suenioId} />
+          {/* <div className="flex gap-1 flex-col justify-center items-center">
+            <Tooltip content={isUser ? "Voto positivo" : "Inicia sesión"}>
+              <Button
+                isIconOnly
+                color="success"
+                variant={like === "like" ? "shadow" : "bordered"}
+                className="text-xl"
+                aria-label="Me gusta este sueño"
+                onClick={() => setLike("like")}
+                disabled={!isUser}
+              >
+                <PiArrowFatUpFill />
+              </Button>
+            </Tooltip>
           </div>
 
           <div className="flex gap-1 flex-col justify-center items-center">
+            <Tooltip content={isUser ? "Voto negativo" : "Inicia sesión"}>
+              <Button
+                isIconOnly
+                color="warning"
+                variant={like === "dislike" ? "shadow" : "bordered"}
+                className="text-xl"
+                aria-label="No me gusta este sueño"
+                onClick={() => setLike("dislike")}
+                disabled={!isUser}
+              >
+                <PiArrowFatDownFill />
+              </Button>
+            </Tooltip>
+          </div> */}
+
+          <Tooltip content={isUser ? "Reportar" : "Inicia sesión"}>
             <Button
               isIconOnly
-              color="warning"
-              variant={like === "dislike" ? "shadow" : "bordered"}
-              className="text-xl"
-              aria-label="No me gusta este sueño"
-              onClick={() => setLike("dislike")}
+              color="danger"
+              variant="bordered"
+              aria-label="Denuncia este sueño"
+              disabled={!isUser}
             >
-              <PiArrowFatDownFill />
+              <PriorityHighIcon />
             </Button>
-          </div>
-
-          <Button
-            isIconOnly
-            color="danger"
-            variant="bordered"
-            aria-label="Denuncia este sueño"
-          >
-            <PriorityHighIcon />
-          </Button>
+          </Tooltip>
         </div>
       </header>
       <MagicMotion>
         <main className="p-4 bg-gray-800 ">
           <User
             name="Jane Doe"
-            description="hace 6 horas"
+            description={getTimeElapsedString(fecha)}
             className="text-gray-200 "
             avatarProps={{
               src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
@@ -127,12 +157,11 @@ const CardSuenio = ({ suenio }: { suenio: string }) => {
         </main>
       </MagicMotion>
       <footer className="px-4 py-2 backdrop-blur-sm bg-white/30  bg-gray-700 flex gap-2 flex-wrap">
-        <Chip color="default">Caía</Chip>
-        <Chip color="primary">volaba</Chip>
-        <Chip color="secondary">alguien me perseguía</Chip>
-        <Chip color="success">no podía correr</Chip>
-        <Chip color="warning">yo moría</Chip>
-        <Chip color="danger">veía un muerto</Chip>
+        {categorias.map((categoria: categoria) => (
+          <Chip key={categoria.id} color={colorCategoriaMap[categoria.id]}>
+            {categoria.name}
+          </Chip>
+        ))}
       </footer>
     </div>
   );
