@@ -9,26 +9,30 @@ import useSWR from "swr";
 import { suenioProps } from "@/tipos/sueniosTipos";
 import CardSuenio from "@/components/cardSuenio/cardSueño";
 import { useUserStore } from "@/store/user";
+import usePublicSuenios from "@/customHooks/useSuenios";
 
 export default function Home() {
   const user = useUserStore((state) => state.user);
 
-  const fetcher = async (url: string) => {
-    try {
-      const response = await axiosInstance(url);
-      return response.data;
-    } catch (error) {
-      throw new Error("Failed to fetch data");
-    }
-  };
-  const {
-    data: sueniosPublicos,
-    error: sueniosError,
-    isLoading: sueniosIsLoading,
-    isValidating: sueniosIsValidating,
-  } = useSWR("/public/latest_posts", fetcher);
+  // const fetcher = async (url: string) => {
+  //   try {
+  //     const response = await axiosInstance(url);
+  //     return response.data;
+  //   } catch (error) {
+  //     throw new Error("Failed to fetch data");
+  //   }
+  // };
+
+  // const {
+  //   data: sueniosPublicos,
+  //   error: sueniosError,
+  //   isLoading: sueniosIsLoading,
+  //   isValidating: sueniosIsValidating,
+  // } = useSWR("/public/latest_posts", fetcher);
 
   // console.log(sueniosPublicos);
+
+  const { sueniosPublicos, sueniosIsLoading } = usePublicSuenios();
 
   return (
     <main className="max-w-6xl px-5 flex-row mx-auto flex gap-10 flex-wrap ">
@@ -41,7 +45,6 @@ export default function Home() {
       </aside>
 
       <section className="w-full flex flex-col gap-4 md:flex-[6] mb-8 md:order-2">
-  
         {user ? <PostSuenio /> : null}
         {sueniosPublicos?.length > 0 &&
           sueniosPublicos?.map((suenio: suenioProps) => {

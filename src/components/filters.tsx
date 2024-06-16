@@ -1,3 +1,4 @@
+import { useFiltrosStore } from "@/store/filtrosSuenios";
 import { filtros } from "@/utils/filtros";
 import {
   CheckboxGroup,
@@ -5,15 +6,14 @@ import {
   Button,
   Modal,
   ModalContent,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
-import { useState } from "react";
 
 const Filters = () => {
-  const [selected, setSelected] = useState([""]);
+  const setFiltros = useFiltrosStore((state) => state.setFiltros);
+  const filtrosElegidos = useFiltrosStore((state) => state.filtros);
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
@@ -22,8 +22,8 @@ const Filters = () => {
         <CheckboxGroup
           label="Soñé que..."
           color="warning"
-          value={selected}
-          onValueChange={setSelected}
+          value={filtrosElegidos}
+          onValueChange={setFiltros}
         >
           {filtros.map((filter) => (
             <Checkbox key={filter.value} value={filter.value}>
@@ -35,8 +35,8 @@ const Filters = () => {
           className="mt-3"
           color="primary"
           variant="bordered"
-          onClick={() => setSelected([""])}
-          isDisabled={selected.length < 2}
+          onClick={() => setFiltros([""])}
+          isDisabled={filtrosElegidos.length < 2}
         >
           Resetear
         </Button>
@@ -53,8 +53,8 @@ const Filters = () => {
                 <CheckboxGroup
                   label="Soñé que..."
                   color="warning"
-                  value={selected}
-                  onValueChange={setSelected}
+                  value={filtrosElegidos}
+                  onValueChange={setFiltros}
                 >
                   {filtros.map((filter) => (
                     <Checkbox key={filter.value} value={filter.value}>
@@ -66,8 +66,8 @@ const Filters = () => {
                   className="mt-3"
                   color="primary"
                   variant="bordered"
-                  onClick={() => setSelected([""])}
-                  isDisabled={selected.length < 2}
+                  onClick={() => setFiltros([""])}
+                  isDisabled={filtrosElegidos.length < 2}
                 >
                   Resetear
                 </Button>
