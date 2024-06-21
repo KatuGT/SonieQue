@@ -1,5 +1,5 @@
 "use client";
- import {
+import {
   Button,
   Checkbox,
   CheckboxGroup,
@@ -15,14 +15,41 @@
   useDisclosure,
 } from "@nextui-org/react";
 import EditIcon from "@mui/icons-material/Edit";
-import ClearIcon from "@mui/icons-material/Clear";
 import { useState } from "react";
 import CardSuenio from "@/components/cardSuenio/cardSueño";
+import { axiosInstance } from "@/utils/axiosInstance";
+import Cookies from "js-cookie";
+import useSWR from "swr";
+import { suenioProps } from "@/tipos/sueniosTipos";
+import BorrarMiSuenio from "@/components/perfilConfig/misSuenios/borrarMiSuenio";
 
 const MisSuenios = () => {
   const [selected, setSelected] = useState("todos");
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen: isOpenToEdit, onOpen, onOpenChange } = useDisclosure();
+
+  const token = Cookies.get("token");
+
+  const fetcher = async (url: string) => {
+    try {
+      const response = await axiosInstance(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to fetch data");
+    }
+  };
+
+  const apiUrl = "/user/user_post";
+
+  const {
+    data: sueniosUser,
+    error: sueniosError,
+    isLoading: sueniosIsLoading,
+    isValidating: sueniosIsValidating,
+    mutate,
+  } = useSWR(token ? apiUrl : null, fetcher);
 
   return (
     <section className="flex flex-col gap-4 px-4 mb-10">
@@ -32,45 +59,42 @@ const MisSuenios = () => {
         <Radio value="publicos">Solo públicos</Radio>
       </RadioGroup>
       <section className="grid gap-16">
-        <div className="flex gap-4 flex-col md:flex-row">
-          {/* <CardSuenio suenio="loremg g fdgd g dfgdfg" />{categorias.map((categoria: categoria) */}
-          <div className="rounded-lg flex md:flex-col gap-2 ">
-            <Button color="danger" variant="ghost" startContent={<ClearIcon />}>
-              Borrar
-            </Button>
+        {sueniosUser?.length > 0 &&
+          sueniosUser?.map((suenio: suenioProps) => {
+            return (
+              <div
+                className="flex gap-4 flex-col md:flex-row"
+                key={suenio.id + suenio.creationDate}
+              >
+                <CardSuenio
+                  isUser={true}
+                  suenio={suenio.story}
+                  fecha={suenio.creationDate}
+                  categorias={suenio.categories}
+                  suenioId={suenio.id}
+                  isAnonymous={suenio.anonymous}
+                  userImg={suenio.userImgAvatarUrl}
+                  userNickname={suenio.nickNameUser}
+                />
+                <div className="rounded-lg flex md:flex-col gap-2 ">
+                  <BorrarMiSuenio idSuenio={1} />
 
-            <Button
-              onPress={onOpen}
-              color="warning"
-              variant="ghost"
-              startContent={<EditIcon />}
-            >
-              Editar
-            </Button>
-          </div>
-        </div>
-
-        <div className="flex gap-4 flex-col md:flex-row">
-          {/* <CardSuenio suenio="loremg g fdgd g dfgdfg" /> */}
-          <div className="rounded-lg flex md:flex-col gap-2 ">
-            <Button color="danger" variant="ghost" startContent={<ClearIcon />}>
-              Borrar
-            </Button>
-
-            <Button
-              onPress={onOpen}
-              color="warning"
-              variant="ghost"
-              startContent={<EditIcon />}
-            >
-              Editar
-            </Button>
-          </div>
-        </div>
+                  <Button
+                    onPress={onOpen}
+                    color="warning"
+                    variant="ghost"
+                    startContent={<EditIcon />}
+                  >
+                    Editar
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
       </section>
       <>
         <Modal
-          isOpen={isOpen}
+          isOpen={isOpenToEdit}
           onOpenChange={onOpenChange}
           placement="top-center"
         >

@@ -28,7 +28,7 @@ interface userPatchProps {
   [key: string]: string;
 }
 
-const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
+const UserEdit = ({ currentUserData }: { currentUserData: userProps }) => {
   const {
     control,
     handleSubmit,
@@ -41,15 +41,26 @@ const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
   const [error, setError] = useState("");
 
   const { field } = useController({ control, name: "imageProfile" });
+  const [profileImage, setProfileImage] = useState<File | string | null>(null);
+  console.log(profileImage);
 
   const onSubmitEdit = async (data: userPatchProps) => {
     setError("");
 
-    console.log(data);
     const formData = new FormData();
 
-    for (const key in data) {
-      formData.append(key, data[key]);
+    // for (const key in data) {
+    //   formData.append(key, data[key]);
+    // }
+    if (data.nickName) {
+      formData.append("nickName", data.nickName);
+    }
+
+    if (data.borderColorImg) {
+      formData.append("borderColorImg", data.borderColorImg);
+    }
+    if (profileImage) {
+      formData.append("image", profileImage);
     }
 
     try {
@@ -92,6 +103,7 @@ const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
         height <= maxPX
       ) {
         setImagenPreview(img.src);
+        setProfileImage(file);
         setTamanioIncorrecto(false);
       } else {
         setTamanioIncorrecto(true);
@@ -138,7 +150,10 @@ const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
                     <button
                       className="text-center w-full pt-2 text-red-600"
                       type="button"
-                      onClick={() => setImagenPreview("")}
+                      onClick={() => {
+                        setImagenPreview("");
+                        setProfileImage(null);
+                      }}
                     >
                       Borrar
                     </button>
@@ -158,7 +173,10 @@ const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
                 <RadioButtonImage
                   key={index}
                   value={imagen.path}
-                  onChange={() => setImagenPreview(imagen.path)}
+                  onChange={() => {
+                    setImagenPreview(imagen.path);
+                    setProfileImage(imagen.path);
+                  }}
                 >
                   <Image
                     alt="imagen de perfil"
@@ -207,7 +225,7 @@ const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
                   <EditIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                 }
                 label="Nombre / Apodo"
-                placeholder={currentUserDAta?.nickName}
+                placeholder={currentUserData?.nickName}
                 variant="bordered"
                 style={{ width: "fit-content" }}
                 {...field}
@@ -215,7 +233,7 @@ const UserEdit = ({ currentUserDAta }: { currentUserDAta: userProps }) => {
             )}
           />
         </div>
-        <button>Send</button>
+        <button type="submit">Enviar</button>
       </form>
     </div>
   );

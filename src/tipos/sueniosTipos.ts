@@ -13,5 +13,7 @@ export interface suenioProps {
     likeDreams: [],
     categories: [
         categoria
-    ]
+    ],
+    nickNameUser: string
+    userImgAvatarUrl: null | string
 }

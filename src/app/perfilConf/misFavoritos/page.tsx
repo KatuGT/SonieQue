@@ -33,7 +33,16 @@ const MisFavoritos = () => {
       </RadioGroup>
       <section className="grid gap-16">
         <div className="flex gap-4 flex-col">
-          {/* <CardSuenio  suenio="loremg g fdgd g dfgdfg" /> */}
+          {/* <CardSuenio
+                  isUser={true}
+                  suenio={suenio.story}
+                  fecha={suenio.creationDate}
+                  categorias={suenio.categories}
+                  suenioId={suenio.id}
+                  isAnonymous={suenio.anonymous}
+                  userImg={suenio.userImgAvatarUrl}
+                  userNickname={suenio.nickNameUser}
+                /> */}
           <p className="text-xs text-gray-50">
             Agregado a favoritos hace 2 horas
           </p>

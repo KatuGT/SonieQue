@@ -2,7 +2,6 @@
 import { useFiltrosStore } from "@/store/filtrosSuenios";
 import { axiosInstance } from "@/utils/axiosInstance";
 import axios, { AxiosRequestConfig } from "axios";
-import Cookies from "js-cookie";
 import useSWR from 'swr'
 
 const usePublicSuenios = () => {
@@ -43,7 +42,7 @@ const usePublicSuenios = () => {
         error: sueniosError,
         isLoading: sueniosIsLoading,
         isValidating: sueniosIsValidating,
-    } = useSWR(filtrosElegidos.length > 1 ? `/public/filter_post/${filtrosElegidos.join(",")}` : "/public/latest_posts", fetcher);
+    } = useSWR(`/public/filter_post?categoryIds=${filtrosElegidos.join(",")}`, fetcher);
 
     return { sueniosPublicos, sueniosError, sueniosIsLoading, sueniosIsValidating }
 }

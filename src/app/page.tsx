@@ -56,6 +56,9 @@ export default function Home() {
                 fecha={suenio.creationDate}
                 categorias={suenio.categories}
                 suenioId={suenio.id}
+                userImg={suenio.userImgAvatarUrl}
+                userNickname={suenio.nickNameUser}
+                isAnonymous={suenio.anonymous}
               />
             );
           })}
