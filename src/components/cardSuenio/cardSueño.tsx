@@ -19,12 +19,18 @@ const CardSuenio = ({
   fecha,
   categorias,
   suenioId,
+  userImg,
+  userNickname,
+  isAnonymous
 }: {
   suenio: string;
   isUser: Boolean;
   fecha: string;
   categorias: categoria[];
   suenioId: number;
+  userImg: string  | null;
+  userNickname: string;
+  isAnonymous: Boolean
 }) => {
   const [verMas, setVerMas] = useState(false);
 
@@ -125,11 +131,11 @@ const CardSuenio = ({
       <MagicMotion>
         <main className="p-4 bg-gray-800 ">
           <User
-            name="Jane Doe"
+            name={isAnonymous ? "queTi" : userNickname}
             description={getTimeElapsedString(fecha)}
             className="text-gray-200 "
             avatarProps={{
-              src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+              src: userImg ? userImg : "/profile-pictures/anonimo-1.jpeg",
             }}
             key="exclude"
           />

@@ -42,7 +42,7 @@ const usePublicSuenios = () => {
         error: sueniosError,
         isLoading: sueniosIsLoading,
         isValidating: sueniosIsValidating,
-    } = useSWR(filtrosElegidos.length > 1 ? `/public/filter_post/${filtrosElegidos.join(",")}` : "/public/latest_posts", fetcher);
+    } = useSWR(`/public/filter_post?categoryIds=${filtrosElegidos.join(",")}`, fetcher);
 
     return { sueniosPublicos, sueniosError, sueniosIsLoading, sueniosIsValidating }
 }

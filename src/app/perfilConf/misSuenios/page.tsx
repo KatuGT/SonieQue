@@ -72,6 +72,9 @@ const MisSuenios = () => {
                   fecha={suenio.creationDate}
                   categorias={suenio.categories}
                   suenioId={suenio.id}
+                  isAnonymous={suenio.anonymous}
+                  userImg={suenio.userImgAvatarUrl}
+                  userNickname={suenio.nickNameUser}
                 />
                 <div className="rounded-lg flex md:flex-col gap-2 ">
                   <BorrarMiSuenio idSuenio={1} />
