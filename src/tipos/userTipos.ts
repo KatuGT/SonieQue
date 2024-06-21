@@ -1,7 +1,5 @@
 export interface userProps {
     id: number,
-    name: string,
-    lastName: string,
     email: string,
     nickName: string,
     imageProfile: string,
@@ -9,5 +7,9 @@ export interface userProps {
     borderColorImg: "default" | "primary" | "secondary" | "success" | "warning" | "danger",
     postDreams: [],
     comments: [],
-    likeDreams: []
+    likeDreams: {
+        id: number;
+        likeDate: string;
+        likesType: "LIKE" | "DISLIKE";
+    }[]
 }

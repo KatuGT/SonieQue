@@ -24,6 +24,7 @@ import { filtros } from "@/utils/filtros";
 import { axiosInstance } from "@/utils/axiosInstance";
 import Cookies from "js-cookie";
 import { postSueniosSchema } from "@/utils/formulSchemas/postSuenio";
+import { useSWRConfig } from "swr";
 
 interface PostSuenioProps {
   story: string;
@@ -34,7 +35,7 @@ interface PostSuenioProps {
 }
 
 const PostSuenio = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const [imagePreview, setImagePreview] = useState<string[]>([]);
 
@@ -69,9 +70,10 @@ const PostSuenio = () => {
             ((width >= minPX || height >= minPX) && width <= maxPX) ||
             height <= maxPX
           ) {
-            setImagePreview((prevImages) => [...prevImages, img.src]);
+            // setImagePreview((prevImages) => [...prevImages, img.src]);
+            setImagePreview((prevImages) => [img.src]);
             setTamanioIncorrecto(false);
-            setArchivosParaSubir(files);
+            setArchivosParaSubir(files[0]);
           } else {
             setTamanioIncorrecto(true);
           }
@@ -96,15 +98,17 @@ const PostSuenio = () => {
     },
   });
 
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset({ story: "", images: null, idCategory: [] });
-      setImagePreview([]);
-      setArchivosParaSubir(null);
-    }
-  }, [isSubmitSuccessful, reset]);
+  // useEffect(() => {
+  //   if (isSubmitSuccessful) {
+  //     reset({ story: "", images: null, idCategory: [] });
+  //     setImagePreview([]);
+  //     setArchivosParaSubir(null);
+  //   }
+  // }, [isSubmitSuccessful, reset]);
 
   const token = Cookies.get("token");
+
+  const { mutate } = useSWRConfig();
 
   const onSubmitLogin = async (data: PostSuenioProps) => {
     const formdata = new FormData();
@@ -124,7 +128,7 @@ const PostSuenio = () => {
     try {
       if (archivosParaSubir) {
         // const imageURLs = await uploadImages(archivosParaSubir);
-        console.log(archivosParaSubir);
+        formdata.append("images", archivosParaSubir);
         setTamanioIncorrecto(false);
         setCantidadImgExcedida(false);
       }
@@ -135,7 +139,12 @@ const PostSuenio = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response);
+      if (response.status === 201) {
+        mutate("/public/latest_posts");
+        mutate("/public/latest_posts");
+        resetForm();
+        onClose();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -230,7 +239,7 @@ const PostSuenio = () => {
                           className="self-start"
                           color="success"
                           style={{ pointerEvents: "none", cursor: "pointer" }}
-                          isDisabled={imagePreview.length === 3}
+                          isDisabled={!imagePreview ? true : false}
                         >
                           Agregar imagen
                         </Button>
@@ -248,8 +257,8 @@ const PostSuenio = () => {
                             id="botonImagen"
                             type="file"
                             accept="image/*"
-                            multiple
                             capture
+                            disabled={!imagePreview ? true : false}
                             onChange={(e) => {
                               onChange(e);
                               handleChosenImagen(e);
@@ -264,7 +273,7 @@ const PostSuenio = () => {
                           cantidadImgExcedida && "text-red-500"
                         }`}
                       >
-                        - Máximo 3 imagenes
+                        - Máximo 1 imagen
                       </p>
                       <p
                         className={`text-xs text-gray-500 ${
@@ -290,11 +299,12 @@ const PostSuenio = () => {
                             />
                             <div
                               className="absolute h-full w-full bg-gray-600/30 inset-0 z-10 opacity-0 hover:opacity-100 overflow-hidden flex justify-center items-center text-superDarkBlue text-xl"
-                              onClick={() =>
+                              onClick={() => {
                                 setImagePreview((prev) =>
                                   prev.filter((img) => img !== imageUrl)
-                                )
-                              }
+                                );
+                                setArchivosParaSubir("");
+                              }}
                             >
                               <ClearIcon className="text-4xl" />
                             </div>
