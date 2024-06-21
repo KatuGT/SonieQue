@@ -37,14 +37,13 @@ const EditarPerfil = () => {
     router.refresh();
   };
 
-  const { suenios } = useUserSuenios();
 
   return (
     <div className="px-4 flex flex-col gap-4 backdrop-blur-sm p-1 rounded-sm overflow-hidden mb-10">
       <section className="flex gap-4 items-center">
         <Avatar
           isBordered
-          color="secondary"
+          color={data?.borderColorImg}
           className="w-20 h-20 text-large"
           radius="sm"
           src={profileImage}
@@ -58,7 +57,7 @@ const EditarPerfil = () => {
           </span>
         </div>
       </section>
-      <Chip color="warning" variant="dot">
+      <Chip color="success" variant="dot">
         E-mail: {data?.email}
       </Chip>
 
@@ -87,7 +86,7 @@ const EditarPerfil = () => {
           title="Editar"
           startContent={<EditIcon className="text-success" />}
         >
-          <UserEdit currentUserDAta={data} />
+          <UserEdit currentUserData={data} />
         </AccordionItem>
       </Accordion>
 

@@ -141,6 +141,7 @@ const PostSuenio = () => {
       });
       if (response.status === 201) {
         mutate("/public/latest_posts");
+        mutate("/public/latest_posts");
         resetForm();
         onClose();
       }
@@ -153,7 +154,6 @@ const PostSuenio = () => {
     reset({ images: null, story: "", idCategory: [] }), setImagePreview([]);
     setArchivosParaSubir([]);
   };
-
 
   return (
     <>

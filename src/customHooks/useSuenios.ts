@@ -2,7 +2,6 @@
 import { useFiltrosStore } from "@/store/filtrosSuenios";
 import { axiosInstance } from "@/utils/axiosInstance";
 import axios, { AxiosRequestConfig } from "axios";
-import Cookies from "js-cookie";
 import useSWR from 'swr'
 
 const usePublicSuenios = () => {

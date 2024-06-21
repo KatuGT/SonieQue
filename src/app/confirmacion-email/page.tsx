@@ -9,7 +9,6 @@ const ConfirmacionEmail = () => {
       const response = await axiosInstance.post(
         `/active-user?email=93katu@gmail.com`
       );
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
