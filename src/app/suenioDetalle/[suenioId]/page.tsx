@@ -16,8 +16,12 @@ import { PiArrowFatUpFill, PiArrowFatDownFill } from "react-icons/pi";
 import NextImage from "next/image";
 import ModalImagenes from "@/components/modalImagenes";
 import ComentariosSuenio from "@/components/comentariosSuenio";
+import { axiosInstance } from "@/utils/axiosInstance";
+import useSWR from "swr";
 
-const SuenioDetalle = () => {
+const SuenioDetalle = ({ params }: { params: { suenioId: string } }) => {
+  console.log(params);
+
   const [like, setLike] = useState("none");
   const [favorito, setFavorito] = useState(false);
 
@@ -38,8 +42,29 @@ const SuenioDetalle = () => {
     },
   ];
 
-  const [imagenClickeada, setImagenClickeada] = useState(0)
+  const [imagenClickeada, setImagenClickeada] = useState(0);
 
+  const fetcher = async (url: string) => {
+    try {
+      const response = await axiosInstance.get(url);
+      return response;
+    } catch (error) {
+      throw new Error("Failed to fetch data");
+    }
+  };
+
+  const apiUrl = `/user/post_dream/${params?.suenioId}`;
+
+  const {
+    data: suenioDetail,
+    error: sueniosError,
+    isLoading: sueniosIsLoading,
+    isValidating: sueniosIsValidating,
+    mutate,
+  } = useSWR(apiUrl, fetcher);
+
+  console.log(suenioDetail);
+  
   return (
     <section className="max-w-4xl px-5 flex flex-col mx-auto gap-10 pb-10">
       <div className="flex gap-5">
@@ -125,7 +150,10 @@ const SuenioDetalle = () => {
             return (
               <Image
                 key={imagen.id}
-                onClick={() => {onOpen(); setImagenClickeada(index)} }
+                onClick={() => {
+                  onOpen();
+                  setImagenClickeada(index);
+                }}
                 className="cursor-pointer"
                 as={NextImage}
                 isZoomed
@@ -137,7 +165,12 @@ const SuenioDetalle = () => {
             );
           })}
         </div>
-        <ModalImagenes isOpen={isOpen} onClose={onClose} imagenes={ilustraciones} imagenClickeada={imagenClickeada}/>
+        <ModalImagenes
+          isOpen={isOpen}
+          onClose={onClose}
+          imagenes={ilustraciones}
+          imagenClickeada={imagenClickeada}
+        />
       </section>
       <Divider />
       <div>
